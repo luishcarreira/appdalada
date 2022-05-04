@@ -286,8 +286,12 @@ class _CreateGroupState extends State<CreateGroup> {
                           dropdownValue = newValue!;
                         });
                       },
-                      items: <String>['Iniciante', 'Intermediário', 'Avançado']
-                          .map<DropdownMenuItem<String>>((String value) {
+                      items: <String>[
+                        'Iniciante',
+                        'Intermediário',
+                        'Avançado',
+                        'Livre'
+                      ].map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),
