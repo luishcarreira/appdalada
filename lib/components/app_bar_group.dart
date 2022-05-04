@@ -8,7 +8,7 @@ class AppBarGroup extends PreferredSize {
     context,
   }) : super(
           key: key,
-          preferredSize: Size.fromHeight(140),
+          preferredSize: Size.fromHeight(100),
           child: Column(
             children: [
               Container(

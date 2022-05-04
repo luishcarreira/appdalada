@@ -1,5 +1,6 @@
 import 'package:appdalada/core/app/app_colors.dart';
 import 'package:appdalada/core/service/auth/auth_firebase_service.dart';
+import 'package:appdalada/pages/chat/create_group.dart';
 import 'package:appdalada/pages/explorar/explorar_page.dart';
 import 'package:appdalada/pages/splash/splash_page.dart';
 import 'package:appdalada/pages/user/user_update_page.dart';
