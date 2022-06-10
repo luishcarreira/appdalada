@@ -38,7 +38,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
               snapshot.data!.data() as Map<String, dynamic>;
 
           return UserProfileWidget(
-            foto: firebase.usuario!.photoURL!,
+            foto:
+                'https://images.unsplash.com/photo-1583361703638-83bcdf354425?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTQ1fHx0ZWNobm9sb2d5fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
             nome: firebase.usuario!.displayName,
             apelido: data['apelido'],
             classificacao: data['classificacao'],

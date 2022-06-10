@@ -42,33 +42,33 @@ class _UserRegisterSobrePageState extends State<UserRegisterSobrePage> {
     return Scaffold(
       body: ListView(
         children: [
-          SizedBox(height: 40),
+          SizedBox(height: 25),
           Column(
             children: [
               Text(
                 'Nos fale um pouco',
-                style: GoogleFonts.poppins(
-                  fontSize: 40,
+                style: GoogleFonts.quicksand(
+                  fontSize: 36,
                   color: AppColors.principal,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   height: 1.2,
                 ),
               ),
               Text(
                 'mais sobre',
-                style: GoogleFonts.poppins(
-                  fontSize: 40,
+                style: GoogleFonts.quicksand(
+                  fontSize: 36,
                   color: AppColors.principal,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   height: 1.2,
                 ),
               ),
               Text(
                 'você!',
-                style: GoogleFonts.poppins(
-                  fontSize: 40,
+                style: GoogleFonts.quicksand(
+                  fontSize: 36,
                   color: AppColors.principal,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   height: 1.2,
                 ),
               ),
@@ -79,21 +79,21 @@ class _UserRegisterSobrePageState extends State<UserRegisterSobrePage> {
             children: [
               Text(
                 'Escreva uma breve biografia sobre você! Os',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.quicksand(
                   fontSize: 14,
                   color: Color(0xFFA1C69C),
                 ),
               ),
               Text(
                 'outros usuários poderão visualizar sua',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.quicksand(
                   fontSize: 14,
                   color: Color(0xFFA1C69C),
                 ),
               ),
               Text(
                 'biografia visitando seu perfil.',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.quicksand(
                   fontSize: 14,
                   color: Color(0xFFA1C69C),
                 ),
@@ -106,16 +106,17 @@ class _UserRegisterSobrePageState extends State<UserRegisterSobrePage> {
             child: Padding(
               padding: const EdgeInsets.only(left: 40, right: 40),
               child: Material(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(8),
                 elevation: 5,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(4.0),
                   child: TextFormField(
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.left,
                     controller: _sobre,
-                    maxLines: 3,
+                    maxLines: 6,
+                    maxLength: 200,
                     style: TextStyle(
-                      fontSize: 22,
+                      fontSize: 18,
                     ),
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -148,13 +149,13 @@ class _UserRegisterSobrePageState extends State<UserRegisterSobrePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: EdgeInsets.all(16),
+                      padding: EdgeInsets.all(12),
                       child: Text(
                         'Continuar',
-                        style: GoogleFonts.poppins(
-                          fontSize: 24,
+                        style: GoogleFonts.quicksand(
+                          fontSize: 18,
                           color: Colors.white,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),

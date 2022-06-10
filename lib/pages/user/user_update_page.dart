@@ -77,7 +77,7 @@ class _UserUpdatePageState extends State<UserUpdatePage> {
                           ),
                           Text(
                             "Atualizar \nInformações",
-                            style: GoogleFonts.poppins(
+                            style: GoogleFonts.quicksand(
                               color: AppColors.principal,
                               fontSize: 29,
                               fontWeight: FontWeight.w900,
@@ -236,7 +236,7 @@ class _UserUpdatePageState extends State<UserUpdatePage> {
                                     padding: EdgeInsets.all(16),
                                     child: Text(
                                       'Atualizar',
-                                      style: GoogleFonts.poppins(
+                                      style: GoogleFonts.quicksand(
                                         fontSize: 24,
                                         color: Colors.white,
                                         fontWeight: FontWeight.w700,

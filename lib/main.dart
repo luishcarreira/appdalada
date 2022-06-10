@@ -1,9 +1,7 @@
 import 'package:appdalada/core/app/app_colors.dart';
 import 'package:appdalada/core/service/auth/auth_firebase_service.dart';
-import 'package:appdalada/pages/chat/create_group.dart';
-import 'package:appdalada/pages/explorar/explorar_page.dart';
+import 'package:appdalada/pages/rotas/create_rota_inicial_page.dart';
 import 'package:appdalada/pages/splash/splash_page.dart';
-import 'package:appdalada/pages/user/user_update_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +34,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primaryColor: AppColors.principal,
       ),
-      home: SplashPage(),
+      home: const CreateRotaInicialPage(),
     );
   }
 }

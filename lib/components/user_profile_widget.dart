@@ -99,7 +99,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
             children: <Widget>[
               Text(
                 'Olá, ${widget.nome}',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.quicksand(
                   color: AppColors.principal,
                   fontWeight: FontWeight.w800,
                   fontSize: 24,
@@ -107,7 +107,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
               ),
               Text(
                 '@${widget.apelido}',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.quicksand(
                   color: Color(0xFF9CA59B),
                   fontWeight: FontWeight.w700,
                   fontSize: 14,
@@ -182,7 +182,7 @@ class CardClassificacao extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         child: Text(
           classificacao,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.quicksand(
             color: Color(cor),
             fontWeight: FontWeight.w700,
             fontSize: 14,

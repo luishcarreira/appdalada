@@ -51,11 +51,11 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               Padding(
                 padding: const EdgeInsets.only(left: 25),
                 child: Text(
-                  'Esqueceu\n sua senha?',
-                  style: GoogleFonts.poppins(
-                    fontSize: 36,
+                  'Esqueceu\nsua senha?',
+                  style: GoogleFonts.quicksand(
+                    fontSize: 30,
                     color: AppColors.principal,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: -1,
                     height: 1.2,
                   ),
@@ -68,12 +68,12 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     Padding(
                       padding: const EdgeInsets.all(20),
                       child: Material(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(5),
                         elevation: 5,
                         child: TextFormField(
                           controller: email,
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: 20,
                           ),
                           decoration: InputDecoration(
                             border: InputBorder.none,
@@ -109,13 +109,13 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.all(16),
+                          padding: EdgeInsets.all(12),
                           child: Text(
                             'Enviar código',
-                            style: GoogleFonts.poppins(
-                              fontSize: 24,
+                            style: GoogleFonts.quicksand(
+                              fontSize: 18,
                               color: Colors.white,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),

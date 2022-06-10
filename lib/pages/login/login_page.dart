@@ -36,9 +36,10 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       isLogin = acao;
       if (isLogin) {
-        titulo = 'Bem vindo!';
+        titulo = 'Realizar Login';
+
         actionButton = 'Acessar conta';
-        toggleButton = 'Ainda não tem conta? Cadastre-se agora';
+        toggleButton = 'Cadastrar';
       } else {
         titulo = 'Crie sua conta';
         actionButton = 'Cadastrar';
@@ -103,17 +104,20 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               SizedBox(
-                height: 43,
+                height: 22,
               ),
               Center(
                 child: Text(
                   titulo,
-                  style: GoogleFonts.poppins(
-                    fontSize: 36,
+                  style: GoogleFonts.quicksand(
+                    fontSize: 42,
                     color: AppColors.principal,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
+              ),
+              SizedBox(
+                height: 24,
               ),
               Form(
                 key: _formKey,
@@ -160,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: TextFormField(
                           controller: email,
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: 18,
                           ),
                           decoration: InputDecoration(
                             border: InputBorder.none,
@@ -169,7 +173,7 @@ class _LoginPageState extends State<LoginPage> {
                               color: AppColors.principal,
                             ),
                             prefixIcon: Padding(
-                              padding: const EdgeInsets.all(10),
+                              padding: const EdgeInsets.all(12),
                               child: Icon(
                                 Icons.person,
                                 color: AppColors.principal,
@@ -191,7 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                           controller: senha,
                           obscureText: true,
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: 18,
                           ),
                           decoration: InputDecoration(
                             border: InputBorder.none,
@@ -244,13 +248,13 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.all(16),
+                          padding: EdgeInsets.all(12),
                           child: Text(
                             actionButton,
-                            style: GoogleFonts.poppins(
-                              fontSize: 24,
+                            style: GoogleFonts.quicksand(
+                              fontSize: 18,
                               color: Colors.white,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
@@ -269,11 +273,11 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               SizedBox(
-                height: 100,
+                height: 50,
               ),
-              Center(child: Text('Acessar conta com')),
+              Center(child: Text('Acessar com Google')),
               SizedBox(
-                height: 10,
+                height: 24,
               ),
               GestureDetector(
                 onTap: googleSignIn,

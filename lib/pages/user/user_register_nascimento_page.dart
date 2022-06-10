@@ -51,45 +51,36 @@ class _UserRegisterNascimentoPageState
           Column(
             children: [
               Text(
-                'Qual a sua',
-                style: GoogleFonts.poppins(
-                  fontSize: 40,
+                'Nos informe sua',
+                style: GoogleFonts.quicksand(
+                  fontSize: 36,
                   color: AppColors.principal,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   height: 1.2,
                 ),
               ),
               Text(
-                'data de',
-                style: GoogleFonts.poppins(
-                  fontSize: 40,
+                'data de nascimento',
+                style: GoogleFonts.quicksand(
+                  fontSize: 36,
                   color: AppColors.principal,
-                  fontWeight: FontWeight.bold,
-                  height: 1.2,
-                ),
-              ),
-              Text(
-                'nascimento?',
-                style: GoogleFonts.poppins(
-                  fontSize: 40,
-                  color: AppColors.principal,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   height: 1.2,
                 ),
               ),
             ],
           ),
-          SizedBox(height: 25),
+          SizedBox(height: 32),
           Center(
             child: Text(
               'Insira sua data de nascimento',
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.quicksand(
                 fontSize: 14,
                 color: Color(0xFFA1C69C),
               ),
             ),
           ),
-          SizedBox(height: 25),
+          SizedBox(height: 40),
           Form(
             key: _formKey,
             child: Padding(
@@ -145,13 +136,13 @@ class _UserRegisterNascimentoPageState
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: EdgeInsets.all(16),
+                      padding: EdgeInsets.all(12),
                       child: Text(
                         'Continuar',
-                        style: GoogleFonts.poppins(
-                          fontSize: 24,
+                        style: GoogleFonts.quicksand(
+                          fontSize: 18,
                           color: Colors.white,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),

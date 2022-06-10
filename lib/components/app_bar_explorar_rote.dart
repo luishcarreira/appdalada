@@ -1,12 +1,12 @@
-// ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers
-
 import 'package:appdalada/core/app/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AppBarChatPage extends PreferredSize {
-  AppBarChatPage({Key? key})
-      : super(
+class AppBarExplorarRoute extends PreferredSize {
+  AppBarExplorarRoute({
+    Key? key,
+    context,
+  }) : super(
           key: key,
           preferredSize: Size.fromHeight(100),
           child: Column(
@@ -30,7 +30,7 @@ class AppBarChatPage extends PreferredSize {
                   children: [
                     Center(
                       child: Text(
-                        'Grupos',
+                        'Explorar Rotas',
                         style: GoogleFonts.quicksand(
                           fontSize: 26,
                           color: Colors.white,

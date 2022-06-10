@@ -3,11 +3,10 @@
 import 'package:appdalada/components/app_bar_chat_page.dart';
 import 'package:appdalada/core/app/app_colors.dart';
 import 'package:appdalada/core/service/auth/auth_firebase_service.dart';
-import 'package:appdalada/pages/chat/chat_message.dart';
+import 'package:appdalada/pages/chat/chat_message_page_v2.dart';
 import 'package:appdalada/pages/chat/create_group.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/src/provider.dart';
 
 class ChatPage extends StatefulWidget {
@@ -19,21 +18,23 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     AuthFirebaseService firebase =
         Provider.of<AuthFirebaseService>(context, listen: false);
-    final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance
-        .collection('grupos')
-        .where(
-          'participantes',
-          arrayContains: firebase.usuario!.uid,
-        )
-        //.where('') //campo de pesquisa
-        .snapshots();
+
     return Scaffold(
       appBar: AppBarChatPage(),
       body: StreamBuilder<QuerySnapshot>(
-        stream: _usersStream,
+        stream: firebase.firestore
+            .collection('grupos')
+            .where('participantes', arrayContains: firebase.usuario!.uid)
+            .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             return Text('Something went wrong');
@@ -56,42 +57,26 @@ class _ChatPageState extends State<ChatPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => ChatGroup(
+                            builder: (_) => ChatMessagePage(
+                              refGrupo: data['docRef'],
                               idGrupo: data['id_grupo'],
                               classificacao: data['classificacao'],
                               nome: data['nome'],
+                              imagem: data['imagem'],
                             ),
                           ),
                         );
                       },
-                      leading: Column(
-                        children: [
-                          if (data['classificacao'] == 'Iniciante')
-                            Container(
-                              child: CircleAvatar(
-                                backgroundImage: AssetImage(
-                                    'assets/images/ciclista_iniciante.png'),
-                              ),
-                            ),
-                          if (data['classificacao'] == 'Intermediário')
-                            Container(
-                              child: CircleAvatar(
-                                backgroundImage: AssetImage(
-                                    'assets/images/ciclista_medio.png'),
-                              ),
-                            ),
-                          if (data['classificacao'] == 'Avançado')
-                            Container(
-                              child: CircleAvatar(
-                                backgroundImage: AssetImage(
-                                    'assets/images/ciclista_dificil.png'),
-                              ),
-                            ),
-                        ],
+                      leading: CircleAvatar(
+                        backgroundImage: NetworkImage(data['imagem']),
+                        backgroundColor: Colors.blueGrey,
                       ),
                       title: Text(
                         data['nome'],
                       ),
+                      subtitle: data['ultimaMensagem'] != null
+                          ? Text(data['ultimaMensagem'])
+                          : Text(''),
                     ),
                     Divider(),
                   ],

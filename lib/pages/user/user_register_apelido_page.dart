@@ -29,8 +29,10 @@ class _UserRegisterApelidoPageState extends State<UserRegisterApelidoPage> {
     final isValid = _formKey.currentState!.validate();
 
     if (isValid) {
-      firebase.firestore.collection('usuarios').doc(firebase.usuario!.uid).set({
-        'uid': firebase.usuario!.uid,
+      firebase.firestore
+          .collection('usuarios')
+          .doc(firebase.usuario!.uid)
+          .update({
         'apelido': _apelido.text,
       });
 
@@ -50,42 +52,32 @@ class _UserRegisterApelidoPageState extends State<UserRegisterApelidoPage> {
       body: ListView(
         children: [
           SizedBox(height: 40),
-          Center(
-            child: Text(
-              'Olá ${firebase.usuario!.displayName} =)',
-              style: GoogleFonts.poppins(
-                fontSize: 14,
-                color: Color(0xFFA1C69C),
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
           Column(
             children: [
               Text(
                 'Como você',
-                style: GoogleFonts.poppins(
-                  fontSize: 40,
+                style: GoogleFonts.quicksand(
+                  fontSize: 36,
                   color: AppColors.principal,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   height: 1.2,
                 ),
               ),
               Text(
                 'gostaria de',
-                style: GoogleFonts.poppins(
-                  fontSize: 40,
+                style: GoogleFonts.quicksand(
+                  fontSize: 36,
                   color: AppColors.principal,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   height: 1.2,
                 ),
               ),
               Text(
                 'ser chamado?',
-                style: GoogleFonts.poppins(
-                  fontSize: 40,
+                style: GoogleFonts.quicksand(
+                  fontSize: 36,
                   color: AppColors.principal,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   height: 1.2,
                 ),
               ),
@@ -96,14 +88,14 @@ class _UserRegisterApelidoPageState extends State<UserRegisterApelidoPage> {
             children: [
               Text(
                 'Nome ou apelido que será exibido para os outros',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.quicksand(
                   fontSize: 14,
                   color: Color(0xFFA1C69C),
                 ),
               ),
               Text(
                 'usuários do aplicativo.',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.quicksand(
                   fontSize: 14,
                   color: Color(0xFFA1C69C),
                 ),
@@ -158,11 +150,11 @@ class _UserRegisterApelidoPageState extends State<UserRegisterApelidoPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: EdgeInsets.all(16),
+                      padding: EdgeInsets.all(12),
                       child: Text(
                         'Continuar',
-                        style: GoogleFonts.poppins(
-                          fontSize: 24,
+                        style: GoogleFonts.quicksand(
+                          fontSize: 18,
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
                         ),

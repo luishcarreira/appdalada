@@ -2,7 +2,6 @@
 
 import 'dart:io';
 
-import 'package:appdalada/components/app_bar_group.dart';
 import 'package:appdalada/core/app/app_colors.dart';
 import 'package:appdalada/core/service/auth/auth_firebase_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,14 +12,14 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:math';
 
-class CreateGroup extends StatefulWidget {
-  const CreateGroup({Key? key}) : super(key: key);
+class CreateRotaPage extends StatefulWidget {
+  const CreateRotaPage({Key? key}) : super(key: key);
 
   @override
-  _CreateGroupState createState() => _CreateGroupState();
+  _CreateRotaPageState createState() => _CreateRotaPageState();
 }
 
-class _CreateGroupState extends State<CreateGroup> {
+class _CreateRotaPageState extends State<CreateRotaPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController nome = TextEditingController();
   final ramdom = Random();
@@ -51,8 +50,6 @@ class _CreateGroupState extends State<CreateGroup> {
   }
 
   pickAndUploadImage() async {
-    AuthFirebaseService firebase =
-        Provider.of<AuthFirebaseService>(context, listen: false);
     XFile? file = await getImage();
     if (file != null) {
       UploadTask task = await upload(file.path);
@@ -66,10 +63,8 @@ class _CreateGroupState extends State<CreateGroup> {
 
             break;
           case TaskState.paused:
-            print("Upload is paused.");
             break;
           case TaskState.canceled:
-            print("Upload was canceled");
             break;
           case TaskState.error:
             ScaffoldMessenger.of(context).showSnackBar(
@@ -98,24 +93,17 @@ class _CreateGroupState extends State<CreateGroup> {
   }
 
   _onSubmit() async {
-    final numero = ramdom.nextInt(999999);
-
     AuthFirebaseService firebase =
         Provider.of<AuthFirebaseService>(context, listen: false);
     final isValid = _formKey.currentState!.validate();
 
     if (isValid) {
-      DocumentReference docRef = firebase.firestore.collection('grupos').doc();
-      firebase.firestore.collection('grupos').doc(docRef.id).set(
+      DocumentReference docRef = firebase.firestore.collection('rotas').doc();
+      firebase.firestore.collection('rotas').doc(docRef.id).set(
         {
-          'id_grupo': numero,
-          'administrador': firebase.usuario!.uid,
-          'participantes': [
-            firebase.usuario!.uid,
-          ],
+          'refRota': docRef.id,
           'nome': nome.text,
           'classificacao': dropdownValue,
-          'docRef': docRef.id,
           'imagem': imagem,
         },
       );
@@ -188,7 +176,7 @@ class _CreateGroupState extends State<CreateGroup> {
             ),
             SizedBox(height: 25),
             Text(
-              'Imagem que será exibida no perfil do grupo',
+              'Imagem que será exibida no perfil da rota',
               style: GoogleFonts.quicksand(
                 fontSize: 14,
                 color: Color.fromARGB(255, 185, 185, 185),
@@ -234,7 +222,7 @@ class _CreateGroupState extends State<CreateGroup> {
                           ),
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: 'Nome do Grupo',
+                            hintText: 'Nome da rota',
                             hintStyle: TextStyle(
                               color: AppColors.principal,
                             ),
@@ -257,7 +245,7 @@ class _CreateGroupState extends State<CreateGroup> {
             Padding(
               padding: const EdgeInsets.only(left: 25),
               child: Text(
-                'Nome de exibição do grupo.',
+                'Nome de exibição do rota.',
                 style: GoogleFonts.quicksand(
                   fontSize: 14,
                   color: Colors.black,
@@ -306,7 +294,7 @@ class _CreateGroupState extends State<CreateGroup> {
             Padding(
               padding: const EdgeInsets.only(left: 25),
               child: Text(
-                'Classificação do grupo.',
+                'Classificação da rota.',
                 style: GoogleFonts.quicksand(
                   fontSize: 14,
                   color: Colors.black,

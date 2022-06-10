@@ -9,68 +9,38 @@ class AppBarExplorarPage extends PreferredSize {
     Key? key,
   }) : super(
           key: key,
-          preferredSize: Size.fromHeight(250),
+          preferredSize: Size.fromHeight(100),
           child: Column(
             children: [
               Container(
-                height: 220,
+                padding: EdgeInsets.only(top: 30),
+                height: 120,
                 decoration: BoxDecoration(
                   color: AppColors.principal,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 5,
-                      offset: Offset(0, 3), // changes position of shadow
+                      spreadRadius: 2,
+                      blurRadius: 4,
+                      offset: Offset(0, 1.5), // changes position of shadow
                     ),
                   ],
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(35),
-                    bottomRight: Radius.circular(35),
-                  ),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 40, left: 20, right: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Explorar',
-                        style: GoogleFonts.poppins(
-                          fontSize: 36,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Text(
+                        'Explorar grupos',
+                        style: GoogleFonts.quicksand(
+                          fontSize: 26,
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
                           letterSpacing: 1,
                         ),
                       ),
-                      SizedBox(
-                        height: 40,
-                      ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding: EdgeInsets.fromLTRB(10, 10, 15, 0),
-                          fillColor: Colors.white,
-                          filled: true,
-                          prefixIcon: Icon(Icons.search),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(30.0)),
-                            borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 2,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(30.0)),
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          labelText: 'Buscar',
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ],

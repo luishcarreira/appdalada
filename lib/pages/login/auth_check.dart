@@ -2,6 +2,7 @@
 
 import 'package:appdalada/pages/chat/chat_message.dart';
 import 'package:appdalada/pages/home/home_page.dart';
+import 'package:appdalada/pages/user/user_register_adicionar_foto.dart';
 import 'package:appdalada/pages/user/user_register_apelido_page.dart';
 import 'package:appdalada/pages/user/user_update_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -59,7 +60,7 @@ verificaRegistro(AuthFirebaseService auth) {
       }
 
       if (snapshot.hasData && snapshot.data!.docs.isEmpty) {
-        return UserRegisterApelidoPage();
+        return userRegisterAdicionarFoto();
       } else {
         return HomePage();
       }

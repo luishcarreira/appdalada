@@ -8,7 +8,7 @@ class AppBarGroup extends PreferredSize {
     context,
   }) : super(
           key: key,
-          preferredSize: Size.fromHeight(100),
+          preferredSize: Size.fromHeight(50),
           child: Column(
             children: [
               Container(
@@ -19,14 +19,14 @@ class AppBarGroup extends PreferredSize {
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 5,
-                      offset: Offset(0, 3), // changes position of shadow
+                      spreadRadius: 2,
+                      blurRadius: 4,
+                      offset: Offset(0, 1.5), // changes position of shadow
                     ),
                   ],
                   borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(35),
-                    bottomRight: Radius.circular(35),
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10),
                   ),
                 ),
                 child: Row(
@@ -46,7 +46,7 @@ class AppBarGroup extends PreferredSize {
                     ),
                     Text(
                       'Criar grupo',
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.quicksand(
                         fontSize: 32,
                         color: Colors.white,
                         fontWeight: FontWeight.w600,

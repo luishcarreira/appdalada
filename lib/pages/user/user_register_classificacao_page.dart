@@ -46,20 +46,20 @@ class _UserRegisterClassificacaoPageState
           Column(
             children: [
               Text(
-                'Em qual nivel',
-                style: GoogleFonts.poppins(
+                'Em qual nível',
+                style: GoogleFonts.quicksand(
                   fontSize: 36,
                   color: AppColors.principal,
-                  fontWeight: FontWeight.bold,
-                  height: 1.2,
+                  fontWeight: FontWeight.w600,
+                  height: 1,
                 ),
               ),
               Text(
-                'voce se encaixa?',
-                style: GoogleFonts.poppins(
-                  fontSize: 40,
+                'você se encaixa?',
+                style: GoogleFonts.quicksand(
+                  fontSize: 36,
                   color: AppColors.principal,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   height: 1.2,
                 ),
               ),
@@ -69,26 +69,26 @@ class _UserRegisterClassificacaoPageState
           Column(
             children: [
               Text(
-                'Escreva uma breve biografia sobre você! Os',
-                style: GoogleFonts.poppins(
+                'Escolha seu nível baseado em suas experiências',
+                style: GoogleFonts.quicksand(
                   fontSize: 14,
                   color: Color(0xFFA1C69C),
                 ),
               ),
               Text(
-                'outros usuários poderão visualizar sua',
-                style: GoogleFonts.poppins(
+                'em pedaladas e em esportes em geral',
+                style: GoogleFonts.quicksand(
                   fontSize: 14,
                   color: Color(0xFFA1C69C),
                 ),
               ),
-              Text(
-                'biografia visitando seu perfil.',
-                style: GoogleFonts.poppins(
-                  fontSize: 14,
-                  color: Color(0xFFA1C69C),
-                ),
-              ),
+              // Text(
+              //   'em geral.',
+              //   style: GoogleFonts.quicksand(
+              //     fontSize: 14,
+              //     color: Color(0xFFA1C69C),
+              //   ),
+              // ),
             ],
           ),
           SizedBox(height: 25),
@@ -97,7 +97,7 @@ class _UserRegisterClassificacaoPageState
             child: CardClassificacaoWidget(
               classificacao: 'Iniciante',
               descricao:
-                  'Você está começando no esporte, faz pequenos percursos de trilha.',
+                  'Geralmente são usuários que não estão habituados à pratica de esportes no geral.',
               nomeImagem: 'ciclista_iniciante.png',
               cor: 0xFF39E11E,
             ),
@@ -108,7 +108,7 @@ class _UserRegisterClassificacaoPageState
             child: CardClassificacaoWidget(
               classificacao: 'Intermediário',
               descricao:
-                  'Você está começando no esporte, faz pequenos percursos de trilha.',
+                  'Este perfil já não encontra dificuldades em pequenas pedaladas. .',
               nomeImagem: 'ciclista_medio.png',
               cor: 0xFFFFD500,
             ),
@@ -119,7 +119,7 @@ class _UserRegisterClassificacaoPageState
             child: CardClassificacaoWidget(
               classificacao: 'Avançado',
               descricao:
-                  'Você está começando no esporte, faz pequenos percursos de trilha.',
+                  'Este praticante já reconhece sua capacidade no pedal, capaz de fazer longas trilhas.',
               nomeImagem: 'ciclista_dificil.png',
               cor: 0xFFFF0000,
             ),

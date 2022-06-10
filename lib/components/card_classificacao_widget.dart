@@ -18,7 +18,7 @@ class CardClassificacaoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 100,
-      margin: EdgeInsets.only(left: 60, right: 60),
+      margin: EdgeInsets.only(left: 40, right: 40),
       child: Card(
         elevation: 10,
         shape: RoundedRectangleBorder(
@@ -31,15 +31,15 @@ class CardClassificacaoWidget extends StatelessWidget {
             ),
             title: Text(
               '# $classificacao',
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.quicksand(
                 color: Color(cor),
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 fontSize: 20,
               ),
             ),
             subtitle: Text(
               descricao,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.quicksand(
                 color: Color(0xFF676767),
                 fontWeight: FontWeight.normal,
                 fontSize: 12,

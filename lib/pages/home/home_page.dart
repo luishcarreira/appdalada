@@ -1,6 +1,7 @@
 import 'package:appdalada/core/app/app_colors.dart';
 import 'package:appdalada/pages/chat/chat_page.dart';
 import 'package:appdalada/pages/explorar/explorar_page.dart';
+import 'package:appdalada/pages/rotas/explorar_route.dart';
 import 'package:appdalada/pages/user/user_profile_page.dart';
 import 'package:flutter/material.dart';
 
@@ -33,8 +34,9 @@ class _HomePageState extends State<HomePage> {
       body: PageView(
         controller: pc,
         children: [
-          ChatPage(),
           ExplorarPage(),
+          ExplorarRoute(),
+          ChatPage(),
           UserProfilePage(),
         ],
         onPageChanged: setPaginaAtual,
@@ -42,9 +44,13 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: paginaAtual,
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.group), label: 'Grupos'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Explorar'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Conta'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.search),
+              label: 'Explorar',
+              backgroundColor: Colors.black),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Rotas'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Grupos'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Perfil'),
         ],
         onTap: (pagina) {
           pc.animateToPage(
