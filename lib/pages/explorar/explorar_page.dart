@@ -50,10 +50,10 @@ class _ExplorarPageState extends State<ExplorarPage> {
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(180),
+        preferredSize: Size.fromHeight(100),
         child: Container(
           padding: EdgeInsets.only(
-            top: 24 + MediaQuery.of(context).padding.top,
+            top: 14 + MediaQuery.of(context).padding.bottom,
           ),
           color: AppColors.principal,
           child: SafeArea(
@@ -62,15 +62,19 @@ class _ExplorarPageState extends State<ExplorarPage> {
               children: [
                 Text(
                   'Explorar',
-                  style: GoogleFonts.poppins(
-                    fontSize: 30,
+                  style: GoogleFonts.quicksand(
+                    fontSize: 26,
                     color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    height: 1.2,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 1,
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+                  padding: EdgeInsets.only(
+                    top: 1,
+                    left: 20,
+                    right: 20,
+                  ),
                   child: TextFormField(
                     onChanged: (text) => {
                       searchtxt = text,
@@ -87,10 +91,10 @@ class _ExplorarPageState extends State<ExplorarPage> {
                       filled: true,
                       prefixIcon: Icon(Icons.search),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
                       ),
                     ),
                   ),

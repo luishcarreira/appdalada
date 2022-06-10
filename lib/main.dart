@@ -34,7 +34,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primaryColor: AppColors.principal,
       ),
-      home: const CreateRotaInicialPage(),
+      home: SplashPage(),
     );
   }
 }

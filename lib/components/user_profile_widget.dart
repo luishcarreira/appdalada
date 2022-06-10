@@ -7,14 +7,12 @@ import 'package:provider/provider.dart';
 
 class UserProfileWidget extends StatefulWidget {
   final String foto;
-  final String? nome;
   final String? apelido;
   final String? classificacao;
   final String? sobre;
 
   const UserProfileWidget({
     Key? key,
-    this.nome,
     this.apelido,
     this.classificacao,
     this.sobre,
@@ -98,19 +96,11 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
           child: Column(
             children: <Widget>[
               Text(
-                'Olá, ${widget.nome}',
+                'Olá, ${widget.apelido}',
                 style: GoogleFonts.quicksand(
                   color: AppColors.principal,
                   fontWeight: FontWeight.w800,
                   fontSize: 24,
-                ),
-              ),
-              Text(
-                '@${widget.apelido}',
-                style: GoogleFonts.quicksand(
-                  color: Color(0xFF9CA59B),
-                  fontWeight: FontWeight.w700,
-                  fontSize: 14,
                 ),
               ),
               SizedBox(

@@ -76,7 +76,7 @@ class _ChatPageState extends State<ChatPage> {
                       ),
                       subtitle: data['ultimaMensagem'] != null
                           ? Text(data['ultimaMensagem'])
-                          : Text(''),
+                          : Text('Nenhuma mensagem ainda...'),
                     ),
                     Divider(),
                   ],

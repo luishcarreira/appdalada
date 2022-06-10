@@ -1,25 +1,26 @@
 import 'dart:io';
 
-import 'package:appdalada/components/user_profile_widget.dart';
 import 'package:appdalada/core/app/app_colors.dart';
 import 'package:appdalada/core/service/auth/auth_firebase_service.dart';
-import 'package:appdalada/pages/user/user_register_apelido_page.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:appdalada/pages/user/user_register_nascimento_page.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-class userRegisterAdicionarFoto extends StatefulWidget {
-  const userRegisterAdicionarFoto({Key? key}) : super(key: key);
+class UserRegisterAdicionarFoto extends StatefulWidget {
+  const UserRegisterAdicionarFoto({Key? key}) : super(key: key);
 
   @override
-  State<userRegisterAdicionarFoto> createState() =>
-      _userRegisterAdicionarFotoState();
+  State<UserRegisterAdicionarFoto> createState() =>
+      _UserRegisterAdicionarFotoState();
 }
 
-class _userRegisterAdicionarFotoState extends State<userRegisterAdicionarFoto> {
+class _UserRegisterAdicionarFotoState extends State<UserRegisterAdicionarFoto> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _apelido = TextEditingController();
+
   final FirebaseStorage storage = FirebaseStorage.instance;
   bool sucess = false;
   String ref = '';
@@ -74,35 +75,59 @@ class _userRegisterAdicionarFotoState extends State<userRegisterAdicionarFoto> {
             );
             break;
           case TaskState.success:
+            taskSnapshot.ref.getDownloadURL().then((url) => imagem = url);
+
             setState(() {
-              taskSnapshot.ref.getDownloadURL().then(
-                    (url) => firebase.firestore
-                        .collection('usuarios')
-                        .doc(firebase.usuario!.uid)
-                        .set(
-                      {
-                        'uid': firebase.usuario!.uid,
-                        'imagem': url,
-                      },
-                    ),
-                  );
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('O arquivo foi carregado com sucesso!'),
-                  backgroundColor: Colors.green,
-                ),
-              );
               sucess = true;
             });
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('O arquivo foi carregado com sucesso!'),
+                backgroundColor: Colors.green,
+              ),
+            );
+
             break;
         }
       });
     }
   }
 
+  _onSubmit() async {
+    try {
+      AuthFirebaseService firebase =
+          Provider.of<AuthFirebaseService>(context, listen: false);
+
+      firebase.firestore.collection('usuarios').doc(firebase.usuario!.uid).set(
+        {
+          'uid': firebase.usuario!.uid,
+          'email': firebase.usuario!.email,
+          'apelido': _apelido.text,
+          'imagem': imagem,
+        },
+      );
+
+      firebase.usuario!.updateDisplayName(_apelido.text);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => UserRegisterNascimentoPage(),
+        ),
+      );
+    } on AuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.message),
+          backgroundColor: Colors.red[400],
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    AuthFirebaseService firebase = Provider.of<AuthFirebaseService>(context);
     return Scaffold(
       body: ListView(
         children: [
@@ -145,19 +170,19 @@ class _userRegisterAdicionarFotoState extends State<userRegisterAdicionarFoto> {
                 'Sua imagem será exibida para os outros usuários',
                 style: GoogleFonts.quicksand(
                   fontSize: 14,
-                  color: Color.fromARGB(255, 185, 185, 185),
+                  color: Color(0xFFA1C69C),
                 ),
               ),
               Text(
                 'do Appdalada.',
                 style: GoogleFonts.quicksand(
                   fontSize: 14,
-                  color: Color.fromARGB(255, 185, 185, 185),
+                  color: Color(0xFFA1C69C),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 80),
+          SizedBox(height: 25),
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20),
             child: TextButton(
@@ -178,18 +203,69 @@ class _userRegisterAdicionarFotoState extends State<userRegisterAdicionarFoto> {
               ),
             ),
           ),
-          SizedBox(height: 80),
+          SizedBox(height: 25),
+          Column(
+            children: [
+              Text(
+                'Nome ou apelido que será exibido para os outros',
+                style: GoogleFonts.quicksand(
+                  fontSize: 14,
+                  color: Color(0xFFA1C69C),
+                ),
+              ),
+              Text(
+                'usuários do aplicativo.',
+                style: GoogleFonts.quicksand(
+                  fontSize: 14,
+                  color: Color(0xFFA1C69C),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 25),
+          Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 40, right: 40),
+              child: Material(
+                borderRadius: BorderRadius.circular(10),
+                elevation: 5,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: _apelido,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Apelido',
+                      hintStyle: GoogleFonts.quicksand(
+                        fontSize: 18,
+                        color: Color(0xFFA1C69C),
+                      ),
+                    ),
+                    keyboardType: TextInputType.name,
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'Preencha o campo corretamente!';
+                      }
+
+                      return null;
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 40),
           sucess
               ? Padding(
                   padding: const EdgeInsets.all(24),
                   child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const UserRegisterApelidoPage(),
-                        ),
-                      );
+                    onTap: () async {
+                      _onSubmit();
                     },
                     child: Container(
                       decoration: BoxDecoration(

@@ -1,12 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:appdalada/pages/chat/chat_message.dart';
+import 'package:appdalada/core/app/app_colors.dart';
 import 'package:appdalada/pages/home/home_page.dart';
 import 'package:appdalada/pages/user/user_register_adicionar_foto.dart';
-import 'package:appdalada/pages/user/user_register_apelido_page.dart';
-import 'package:appdalada/pages/user/user_update_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +23,7 @@ class _AuthCheckState extends State<AuthCheck> {
     AuthFirebaseService auth = Provider.of<AuthFirebaseService>(context);
 
     if (auth.isLoading) {
-      return Loading();
+      return loading();
     } else if (auth.usuario == null) {
       return LoginPage();
     } else {
@@ -35,10 +32,21 @@ class _AuthCheckState extends State<AuthCheck> {
   }
 }
 
-Loading() {
+loading() {
   return Scaffold(
     body: Center(
-      child: CircularProgressIndicator(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(
+            backgroundColor: Colors.grey,
+            color: AppColors.principal,
+            strokeWidth: 10,
+          ),
+          SizedBox(height: 20),
+          Text('Aguarde um momento...')
+        ],
+      ),
     ),
   );
 }
@@ -60,7 +68,7 @@ verificaRegistro(AuthFirebaseService auth) {
       }
 
       if (snapshot.hasData && snapshot.data!.docs.isEmpty) {
-        return userRegisterAdicionarFoto();
+        return UserRegisterAdicionarFoto();
       } else {
         return HomePage();
       }

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:appdalada/core/service/auth/auth_firebase_service.dart';
 import 'package:appdalada/pages/home/home_page.dart';
+import 'package:appdalada/pages/rotas/create_rota_inicial_page.dart';
 import 'package:appdalada/pages/rotas/create_rota_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -44,9 +45,10 @@ class _ExplorarRouteState extends State<ExplorarRoute> {
                   }
 
                   if (snapshot.hasData && snapshot.data!.docs.isEmpty) {
-                    return Align(
-                      alignment: Alignment.center,
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             'Até o momento, não existem rotas.',
@@ -88,8 +90,10 @@ class _ExplorarRouteState extends State<ExplorarRoute> {
                           return Column(
                             children: [
                               ListTile(
-                                leading: Container(
-                                    child: Image.network(data['imagem'])),
+                                leading: CircleAvatar(
+                                  backgroundImage: NetworkImage(data['imagem']),
+                                  backgroundColor: Colors.blueGrey,
+                                ),
                                 title: Text(
                                   data['nome'],
                                   style: GoogleFonts.quicksand(
@@ -124,7 +128,7 @@ class _ExplorarRouteState extends State<ExplorarRoute> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => const CreateRotaPage(),
+              builder: (_) => const CreateRotaInicialPage(),
             ),
           );
         },

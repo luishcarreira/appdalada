@@ -4,7 +4,6 @@ import 'package:appdalada/core/app/app_colors.dart';
 import 'package:appdalada/core/service/auth/auth_firebase_service.dart';
 import 'package:appdalada/pages/login/reset_password_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +17,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final email = TextEditingController();
-  final nome = TextEditingController();
   final senha = TextEditingController();
 
   bool isLogin = true;
@@ -63,19 +61,7 @@ class _LoginPageState extends State<LoginPage> {
     try {
       await context
           .read<AuthFirebaseService>()
-          .registrar(email.text, senha.text, nome.text);
-    } on AuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(e.message),
-        backgroundColor: Colors.red[400],
-      ));
-    }
-  }
-
-  googleSignIn() async {
-    print('');
-    try {
-      await context.read<AuthFirebaseService>().signInWithGoogle();
+          .registrar(email.text, senha.text);
     } on AuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(e.message),
@@ -112,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: GoogleFonts.quicksand(
                     fontSize: 42,
                     color: AppColors.principal,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
               ),
@@ -123,37 +109,6 @@ class _LoginPageState extends State<LoginPage> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    if (!isLogin)
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 10, 20, 15),
-                        child: Material(
-                          borderRadius: BorderRadius.circular(10),
-                          //color: Colors.blueGrey[50],
-                          elevation: 5,
-                          //shadowColor: Colors.black,
-                          child: TextFormField(
-                            controller: nome,
-                            style: TextStyle(
-                              fontSize: 22,
-                            ),
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: 'nome',
-                              hintStyle: TextStyle(
-                                color: AppColors.principal,
-                              ),
-                              prefixIcon: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Icon(
-                                  Icons.person,
-                                  color: AppColors.principal,
-                                ),
-                              ),
-                            ),
-                            keyboardType: TextInputType.name,
-                          ),
-                        ),
-                      ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20, 10, 20, 15),
                       child: Material(
@@ -269,21 +224,6 @@ class _LoginPageState extends State<LoginPage> {
                   child: Text(
                     toggleButton,
                     style: TextStyle(fontSize: 15),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 50,
-              ),
-              Center(child: Text('Acessar com Google')),
-              SizedBox(
-                height: 24,
-              ),
-              GestureDetector(
-                onTap: googleSignIn,
-                child: Center(
-                  child: Image.asset(
-                    'assets/images/Google.png',
                   ),
                 ),
               ),

@@ -34,8 +34,8 @@ class _HomePageState extends State<HomePage> {
       body: PageView(
         controller: pc,
         children: [
-          ExplorarPage(),
           ExplorarRoute(),
+          ExplorarPage(),
           ChatPage(),
           UserProfilePage(),
         ],
@@ -45,12 +45,20 @@ class _HomePageState extends State<HomePage> {
         currentIndex: paginaAtual,
         items: [
           BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: 'Explorar',
-              backgroundColor: Colors.black),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Rotas'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Grupos'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Perfil'),
+              icon: Icon(
+                Icons.pedal_bike,
+                color: AppColors.principal,
+              ),
+              label: 'Rotas'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.groups_sharp, color: AppColors.principal),
+              label: 'Grupos'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.chat_outlined, color: AppColors.principal),
+              label: 'Chat'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.person, color: AppColors.principal),
+              label: 'Perfil'),
         ],
         onTap: (pagina) {
           pc.animateToPage(
