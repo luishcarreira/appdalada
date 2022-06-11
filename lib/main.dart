@@ -1,3 +1,4 @@
+import 'package:appdalada/Resources/cards_hub.dart';
 import 'package:appdalada/core/app/app_colors.dart';
 import 'package:appdalada/core/service/auth/auth_firebase_service.dart';
 import 'package:appdalada/pages/rotas/create_rota_inicial_page.dart';
@@ -34,7 +35,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primaryColor: AppColors.principal,
       ),
-      home: SplashPage(),
+      home: CardsHub(),
     );
   }
 }
