@@ -24,11 +24,11 @@ class _CreateRotaInicialPageState extends State<CreateRotaInicialPage> {
         backgroundColor: AppColors.principal,
         title: const Text('Rota Inicial'),
         centerTitle: true,
-        toolbarHeight: 150,
+        toolbarHeight: 200,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(10),
           child: Padding(
-            padding: const EdgeInsets.only(left: 20, top: 20, bottom: 20),
+            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
             child: Column(
               children: [
                 TextFormField(
@@ -82,13 +82,28 @@ class _CreateRotaInicialPageState extends State<CreateRotaInicialPage> {
           myLocationEnabled: true,
           markers: controller.markers,
           onTap: (LatLng latLng) {
-            //_markers.add(Marker(markerId: MarkerId('mark'), position: latLng));
             setState(() {
-              print(latLng);
+              _lat.text = latLng.latitude.toString();
+              _long.text = latLng.longitude.toString();
             });
+
+            controller.markers.add(
+              Marker(
+                markerId: MarkerId('refRota'),
+                position: LatLng(latLng.latitude, latLng.longitude),
+                infoWindow: InfoWindow(title: 'é isso'),
+              ),
+            );
           },
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {},
+        label: Text('Salvar'),
+        backgroundColor: AppColors.principal,
+        icon: Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
