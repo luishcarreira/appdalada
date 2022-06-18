@@ -56,7 +56,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     fontSize: 30,
                     color: AppColors.principal,
                     fontWeight: FontWeight.w600,
-                    letterSpacing: -1,
                     height: 1.2,
                   ),
                 ),

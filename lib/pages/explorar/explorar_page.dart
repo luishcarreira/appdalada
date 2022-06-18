@@ -1,4 +1,4 @@
-import 'package:appdalada/components/app_bar_explorar_page.dart';
+import 'dart:math';
 import 'package:appdalada/core/app/app_colors.dart';
 import 'package:appdalada/core/service/auth/auth_firebase_service.dart';
 import 'package:appdalada/pages/chat/create_group.dart';
@@ -15,45 +15,50 @@ class ExplorarPage extends StatefulWidget {
 }
 
 class _ExplorarPageState extends State<ExplorarPage> {
+  List<int> grupoCod = [0];
+  String searchtxt = '';
+  final ramdom = Random();
+
   @override
   void initState() {
+    initMeusGrupos();
     // TODO: implement initState
     super.initState();
-    initMeusGrupos();
   }
-
-  List<String> grupoCod = [''];
-
-  String searchtxt = '';
 
   initMeusGrupos() {
     AuthFirebaseService firebase =
         Provider.of<AuthFirebaseService>(context, listen: false);
-    Stream<QuerySnapshot> _meusGrupos = firebase.firestore
+
+    firebase.firestore
         .collection('grupos')
         .where('participantes', arrayContains: firebase.usuario!.uid)
-        .snapshots();
-
-    _meusGrupos.forEach((element) {
-      element.docs.asMap().forEach((index, data) {
-        setState(() {
-          grupoCod.add(element.docs[index]['codigo']);
-        });
-      });
-    });
+        .get()
+        .then(
+          (value) => {
+            value.docs.asMap().forEach(
+              (index, data) {
+                if (mounted) {
+                  setState(() {
+                    grupoCod.add(value.docs[index]['id_grupo']);
+                  });
+                }
+              },
+            ),
+          },
+        );
   }
 
   @override
   Widget build(BuildContext context) {
     AuthFirebaseService firebase =
         Provider.of<AuthFirebaseService>(context, listen: false);
-
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100),
+        preferredSize: Size.fromHeight(122),
         child: Container(
           padding: EdgeInsets.only(
-            top: 14 + MediaQuery.of(context).padding.bottom,
+            top: 12 + MediaQuery.of(context).padding.bottom,
           ),
           color: AppColors.principal,
           child: SafeArea(
@@ -61,40 +66,40 @@ class _ExplorarPageState extends State<ExplorarPage> {
             child: Column(
               children: [
                 Text(
-                  'Explorar',
+                  'Grupos',
                   style: GoogleFonts.quicksand(
-                    fontSize: 26,
+                    fontSize: 24,
                     color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 1,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(
-                    top: 1,
-                    left: 20,
-                    right: 20,
+                    top: 15,
+                    left: 40,
+                    right: 40,
                   ),
-                  child: TextFormField(
-                    onChanged: (text) => {
-                      searchtxt = text,
-                      setState(
-                        () {
-                          searchtxt;
-                        },
-                      )
-                    },
-                    decoration: InputDecoration(
-                      isDense: true,
-                      contentPadding: EdgeInsets.fromLTRB(10, 10, 15, 0),
-                      fillColor: Colors.white,
-                      filled: true,
-                      prefixIcon: Icon(Icons.search),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                  child: Material(
+                    borderRadius: BorderRadius.circular(12),
+                    elevation: 3,
+                    child: TextFormField(
+                      style: TextStyle(
+                        fontSize: 18,
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Pesquisar',
+                        hintStyle: TextStyle(
+                          color: AppColors.principal,
+                        ),
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Icon(
+                            Icons.search,
+                            color: AppColors.principal,
+                            size: 18,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -105,17 +110,10 @@ class _ExplorarPageState extends State<ExplorarPage> {
         ),
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: (searchtxt != '' && searchtxt.isNotEmpty)
-            ? firebase.firestore
-                .collection('grupos')
-                .where('nome', isGreaterThanOrEqualTo: searchtxt)
-                .where('nome', isLessThanOrEqualTo: searchtxt + '\uf7ff')
-                .where('id_grupo', whereIn: grupoCod)
-                .snapshots()
-            : firebase.firestore
-                .collection('grupos')
-                .where('id_grupo', whereIn: grupoCod)
-                .snapshots(),
+        stream: firebase.firestore
+            .collection('grupos')
+            .where('id_grupo', whereNotIn: grupoCod)
+            .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             return Text('Something went wrong');
@@ -125,43 +123,86 @@ class _ExplorarPageState extends State<ExplorarPage> {
             return Center(child: CircularProgressIndicator());
           }
 
-          return ListView(
-            children: snapshot.data!.docs.map(
-              (DocumentSnapshot document) {
-                Map<String, dynamic> data =
-                    document.data()! as Map<String, dynamic>;
-
-                return Column(
+          if (snapshot.hasData && snapshot.data!.docs.isEmpty) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ListTile(
-                      onTap: () {
-                        _showDialog(
-                          context,
-                          data['docRef'],
-                        );
-                      },
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(data['imagem']),
-                        backgroundColor: Colors.blueGrey,
-                      ),
-                      title: Text(
-                        data['nome'],
+                    Text(
+                      'Até o momento, não existem grupos.',
+                      style: GoogleFonts.quicksand(
+                        fontSize: 18,
+                        color: Colors.black54,
+                        fontWeight: FontWeight.bold,
+                        height: 1.2,
                       ),
                     ),
-                    Divider(),
+                    Text(
+                      'Clique no "+" no canto inferior direito',
+                      style: GoogleFonts.quicksand(
+                        fontSize: 18,
+                        color: Colors.black54,
+                        fontWeight: FontWeight.bold,
+                        height: 1.2,
+                      ),
+                    ),
+                    Text(
+                      'Para criar uma grupo!',
+                      style: GoogleFonts.quicksand(
+                        fontSize: 18,
+                        color: Colors.black54,
+                        fontWeight: FontWeight.bold,
+                        height: 1.2,
+                      ),
+                    ),
                   ],
-                );
-              },
-            ).toList(),
-          );
+                ),
+              ),
+            );
+          } else {
+            return ListView(
+              children: snapshot.data!.docs.map(
+                (DocumentSnapshot document) {
+                  Map<String, dynamic> data =
+                      document.data()! as Map<String, dynamic>;
+
+                  return Column(
+                    children: [
+                      ListTile(
+                        onTap: () {
+                          _showDialog(
+                            context,
+                            data['docRef'],
+                          );
+                        },
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(data['imagem']),
+                          backgroundColor: Colors.blueGrey,
+                        ),
+                        title: Text(
+                          data['nome'],
+                        ),
+                      ),
+                      Divider(),
+                    ],
+                  );
+                },
+              ).toList(),
+            );
+          }
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          final numero = ramdom.nextInt(999999);
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => CreateGroup(),
+              builder: (_) => CreateGroup(
+                id_grupo: numero,
+              ),
             ),
           );
         },
@@ -189,8 +230,9 @@ void _showDialog(BuildContext context, String docRef) {
             onPressed: () async {
               await firebase.firestore.collection('grupos').doc(docRef).update(
                 {
-                  'participantes':
-                      FieldValue.arrayUnion([firebase.usuario!.uid]),
+                  'participantes': FieldValue.arrayUnion([
+                    firebase.usuario!.uid,
+                  ]),
                 },
               );
               Navigator.of(context).pop();

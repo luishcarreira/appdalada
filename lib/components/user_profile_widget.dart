@@ -1,8 +1,15 @@
+// import 'dart:html';
+
+import 'dart:io';
+
 import 'package:appdalada/core/app/app_colors.dart';
 import 'package:appdalada/core/service/auth/auth_firebase_service.dart';
+import 'package:appdalada/pages/user/user_alterar_classificacao_page.dart';
 import 'package:appdalada/pages/user/user_update_page.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class UserProfileWidget extends StatefulWidget {
@@ -24,12 +31,89 @@ class UserProfileWidget extends StatefulWidget {
 }
 
 class _UserProfileWidgetState extends State<UserProfileWidget> {
+  final FirebaseStorage storage = FirebaseStorage.instance;
+  String ref = '';
+
+  Future<XFile?> getImage() async {
+    final ImagePicker _picker = ImagePicker();
+    XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    return image;
+  }
+
+  Future<UploadTask> upload(String path) async {
+    AuthFirebaseService firebase =
+        Provider.of<AuthFirebaseService>(context, listen: false);
+    File file = File(path);
+    try {
+      ref = 'Images/usr-${firebase.usuario!.uid}.jpg';
+      return storage.ref(ref).putFile(file);
+    } on FirebaseException catch (e) {
+      throw Exception('Erro no upload: ${e.code}');
+    }
+  }
+
+  pickAndUploadImage() async {
+    AuthFirebaseService firebase =
+        Provider.of<AuthFirebaseService>(context, listen: false);
+    XFile? file = await getImage();
+    if (file != null) {
+      UploadTask task = await upload(file.path);
+
+      task.snapshotEvents.listen((taskSnapshot) {
+        switch (taskSnapshot.state) {
+          case TaskState.running:
+            final progress = 100.0 *
+                (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes);
+            print("Upload is $progress% complete.");
+
+            break;
+          case TaskState.paused:
+            print("Upload is paused.");
+            break;
+          case TaskState.canceled:
+            print("Upload was canceled");
+            break;
+          case TaskState.error:
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Erro ao inserir a imagem'),
+                backgroundColor: Colors.red[400],
+              ),
+            );
+            break;
+          case TaskState.success:
+            setState(() {
+              Navigator.pop(context);
+              taskSnapshot.ref.getDownloadURL().then((url) => {
+                    firebase.firestore
+                        .collection('usuarios')
+                        .doc(firebase.usuario!.uid)
+                        .update(
+                      {
+                        'imagem': url,
+                      },
+                    ),
+                  });
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('O arquivo foi carregado com sucesso!'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            });
+            break;
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     AuthFirebaseService firebase = Provider.of<AuthFirebaseService>(
       context,
       listen: false,
     );
+
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
@@ -39,21 +123,19 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
             Container(
               height: 200,
               decoration: BoxDecoration(
-                  color: AppColors.principal,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20),
-                  )),
+                color: AppColors.principal,
+              ),
             ),
           ],
         ),
         //#BOTAO DE LOGOUT
         Positioned(
-          top: 20,
+          top: 45,
           left: 30,
           child: IconButton(
             onPressed: () {
               firebase.logout();
+              firebase.usuario!.reload();
             },
             icon: Icon(
               Icons.logout,
@@ -63,7 +145,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
         ),
         //#BOTAO DE UPDATE
         Positioned(
-          top: 20,
+          top: 45,
           right: 30,
           child: IconButton(
             onPressed: () {
@@ -90,9 +172,10 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
             ),
           ),
         ),
+
         // #TEXT NOME
         Positioned(
-          top: 220,
+          top: 225,
           child: Column(
             children: <Widget>[
               Text(
@@ -106,44 +189,90 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
               SizedBox(
                 height: 10,
               ),
-              (widget.classificacao == 'Iniciante')
-                  ? CardClassificacao(
-                      classificacao: '# ${widget.classificacao!}',
-                      cor: 0xFF39E11E,
-                    )
-                  : (widget.classificacao == 'Intermediário')
-                      ? CardClassificacao(
-                          classificacao: '# ${widget.classificacao!}',
-                          cor: 0xFFFFD500,
-                        )
-                      : CardClassificacao(
-                          classificacao: '# ${widget.classificacao!}',
-                          cor: 0xFFFF0000,
-                        )
+              GestureDetector(
+                onTap: () {
+                  _showDialogClassificacao(context);
+                },
+                child: (widget.classificacao == 'Iniciante')
+                    ? CardClassificacao(
+                        classificacao: '# ${widget.classificacao!}',
+                        cor: 0xFF39E11E,
+                      )
+                    : (widget.classificacao == 'Intermediário')
+                        ? CardClassificacao(
+                            classificacao: '# ${widget.classificacao!}',
+                            cor: 0xFFFFD500,
+                          )
+                        : CardClassificacao(
+                            classificacao: '# ${widget.classificacao!}',
+                            cor: 0xFFFF0000,
+                          ),
+              ),
             ],
           ),
         ),
         // #IMAGEM PERFIL
         Positioned(
           top: 80, // (background container size) - (circle height / 2)
-          child: CircleAvatar(
-            backgroundImage: NetworkImage(widget.foto),
-            radius: 60,
+          child: GestureDetector(
+            onTap: () {
+              _showDialogFoto(context, pickAndUploadImage);
+            },
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(widget.foto),
+              radius: 60,
+            ),
           ),
         ),
         // #CARD SOBRE
         Positioned(
-          top: 450,
+          top: 380,
           child: Card(
             elevation: 4,
             child: Container(
-              margin: EdgeInsets.all(100),
+              margin: EdgeInsets.all(120),
               padding: EdgeInsets.all(20),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Text(widget.sobre!),
+                  Text(
+                    widget.sobre!,
+                    style: GoogleFonts.quicksand(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
                 ],
               ),
+            ),
+          ),
+        ),
+        Positioned(
+          top: 173,
+          width: 40,
+          child: CircleAvatar(
+            backgroundColor: AppColors.principal.withOpacity(0.60),
+            radius: 25,
+          ),
+        ),
+
+        Positioned(
+          top: 173,
+          child: IconButton(
+            onPressed: () {
+              _showDialogFoto(context, pickAndUploadImage);
+            },
+            icon: Icon(Icons.edit, color: Colors.white),
+          ),
+        ),
+        Positioned(
+          top: 316,
+          child: Text(
+            'clique para alterar',
+            style: GoogleFonts.quicksand(
+              color: Colors.grey.shade400,
+              fontSize: 10,
             ),
           ),
         ),
@@ -181,4 +310,57 @@ class CardClassificacao extends StatelessWidget {
       ),
     );
   }
+}
+
+void _showDialogClassificacao(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text("Classificação"),
+        content: const Text("Deseja alterar a classificação?"),
+        actions: <Widget>[
+          TextButton(
+            child: Text("Sim"),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: ((context) => UserAlterarClassificacaoPage())));
+            },
+          ),
+          TextButton(
+            child: Text("Não"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+void _showDialogFoto(BuildContext context, VoidCallback pickAndUploadImage) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text("Foto"),
+        content: const Text("Deseja alterar a foto?"),
+        actions: <Widget>[
+          TextButton(
+            child: Text("Sim"),
+            onPressed: pickAndUploadImage,
+          ),
+          TextButton(
+            child: Text("Não"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

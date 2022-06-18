@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:appdalada/Resources/route-card.dart';
+import 'package:appdalada/Resources/themes.dart';
 import 'package:appdalada/core/service/auth/auth_firebase_service.dart';
 import 'package:appdalada/pages/home/home_page.dart';
 import 'package:appdalada/pages/rotas/create_rota_inicial_page.dart';
@@ -21,13 +23,68 @@ class ExplorarRoute extends StatefulWidget {
 
 class _ExplorarRouteState extends State<ExplorarRoute> {
   final ramdom = Random();
+  String searchtxt = '';
   @override
   Widget build(BuildContext context) {
     AuthFirebaseService firebase =
         Provider.of<AuthFirebaseService>(context, listen: false);
 
     return Scaffold(
-      appBar: AppBarExplorarRoute(),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(122),
+        child: Container(
+          padding: EdgeInsets.only(
+            top: 12 + MediaQuery.of(context).padding.bottom,
+          ),
+          color: AppColors.principal,
+          child: SafeArea(
+            top: true,
+            child: Column(
+              children: [
+                Text(
+                  'Rotas',
+                  style: GoogleFonts.quicksand(
+                    fontSize: 24,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: 15,
+                    left: 30,
+                    right: 30,
+                  ),
+                  child: Material(
+                    borderRadius: BorderRadius.circular(12),
+                    elevation: 3,
+                    child: TextFormField(
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Pesquisar',
+                        hintStyle: TextStyle(
+                          color: AppColors.principal,
+                        ),
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Icon(
+                            Icons.search,
+                            color: AppColors.principal,
+                            size: 18,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
@@ -47,37 +104,39 @@ class _ExplorarRouteState extends State<ExplorarRoute> {
                   if (snapshot.hasData && snapshot.data!.docs.isEmpty) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Até o momento, não existem rotas.',
-                            style: GoogleFonts.poppins(
-                              fontSize: 18,
-                              color: Colors.black54,
-                              fontWeight: FontWeight.bold,
-                              height: 1.2,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Até o momento, não existem rotas.',
+                              style: GoogleFonts.quicksand(
+                                fontSize: 18,
+                                color: Colors.black54,
+                                fontWeight: FontWeight.bold,
+                                height: 1.2,
+                              ),
                             ),
-                          ),
-                          Text(
-                            'Clique no "+" no canto inferior direito',
-                            style: GoogleFonts.poppins(
-                              fontSize: 18,
-                              color: Colors.black54,
-                              fontWeight: FontWeight.bold,
-                              height: 1.2,
+                            Text(
+                              'Clique no "+" no canto inferior direito',
+                              style: GoogleFonts.quicksand(
+                                fontSize: 18,
+                                color: Colors.black54,
+                                fontWeight: FontWeight.bold,
+                                height: 1.2,
+                              ),
                             ),
-                          ),
-                          Text(
-                            'Para criar uma rota!',
-                            style: GoogleFonts.poppins(
-                              fontSize: 18,
-                              color: Colors.black54,
-                              fontWeight: FontWeight.bold,
-                              height: 1.2,
+                            Text(
+                              'para criar uma rota!',
+                              style: GoogleFonts.quicksand(
+                                fontSize: 18,
+                                color: Colors.black54,
+                                fontWeight: FontWeight.bold,
+                                height: 1.2,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     );
                   } else {
@@ -89,27 +148,14 @@ class _ExplorarRouteState extends State<ExplorarRoute> {
 
                           return Column(
                             children: [
-                              ListTile(
-                                leading: CircleAvatar(
-                                  backgroundImage: NetworkImage(data['imagem']),
-                                  backgroundColor: Colors.blueGrey,
-                                ),
-                                title: Text(
-                                  data['nome'],
-                                  style: GoogleFonts.quicksand(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  data['classificacao'],
-                                  style: GoogleFonts.quicksand(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 12,
-                                  ),
-                                ),
+                              PaidMenCard(
+                                imagem: data['imagem'],
+                                nome: data['nome'],
+                                classificacao: data['classificacao'],
                               ),
-                              const Divider(),
+                              const SizedBox(
+                                height: 15,
+                              )
                             ],
                           );
                         },
@@ -124,11 +170,16 @@ class _ExplorarRouteState extends State<ExplorarRoute> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.principal,
-        onPressed: () {
+        onPressed: () async {
+          DocumentReference docRef =
+              firebase.firestore.collection('rotas').doc();
+
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => const CreateRotaInicialPage(),
+              builder: (_) => CreateRotaPage(
+                refDoc: docRef.id,
+              ),
             ),
           );
         },

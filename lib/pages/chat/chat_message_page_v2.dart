@@ -5,9 +5,11 @@ import 'package:appdalada/components/ReplyCard.dart';
 import 'package:appdalada/core/app/app_colors.dart';
 import 'package:appdalada/core/models/message.dart';
 import 'package:appdalada/core/service/auth/auth_firebase_service.dart';
+import 'package:appdalada/pages/home/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class ChatMessagePage extends StatefulWidget {
@@ -33,6 +35,7 @@ class _ChatMessagePageState extends State<ChatMessagePage> {
   final TextEditingController txtMensagemCtrl = TextEditingController();
   bool show = false;
   FocusNode focusNode = FocusNode();
+  String nomeUsuario = '';
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +53,12 @@ class _ChatMessagePageState extends State<ChatMessagePage> {
               titleSpacing: 0,
               leading: InkWell(
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => HomePage(),
+                    ),
+                  );
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -76,9 +84,10 @@ class _ChatMessagePageState extends State<ChatMessagePage> {
                     children: [
                       Text(
                         widget.nome,
-                        style: TextStyle(
-                          fontSize: 18.5,
-                          fontWeight: FontWeight.bold,
+                        style: GoogleFonts.quicksand(
+                          fontSize: 18,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
@@ -86,8 +95,6 @@ class _ChatMessagePageState extends State<ChatMessagePage> {
                 ),
               ),
               actions: [
-                IconButton(icon: Icon(Icons.videocam), onPressed: () {}),
-                IconButton(icon: Icon(Icons.call), onPressed: () {}),
                 PopupMenuButton<String>(
                   padding: EdgeInsets.all(0),
                   onSelected: (value) {
@@ -96,28 +103,26 @@ class _ChatMessagePageState extends State<ChatMessagePage> {
                   itemBuilder: (BuildContext contesxt) {
                     return [
                       PopupMenuItem(
-                        child: Text("View Contact"),
-                        value: "View Contact",
+                        child: Text(
+                          "Participantes",
+                          style: GoogleFonts.quicksand(
+                            fontSize: 16,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        value: "Participantes",
                       ),
                       PopupMenuItem(
-                        child: Text("Media, links, and docs"),
-                        value: "Media, links, and docs",
-                      ),
-                      PopupMenuItem(
-                        child: Text("Whatsapp Web"),
-                        value: "Whatsapp Web",
-                      ),
-                      PopupMenuItem(
-                        child: Text("Search"),
-                        value: "Search",
-                      ),
-                      PopupMenuItem(
-                        child: Text("Mute Notification"),
-                        value: "Mute Notification",
-                      ),
-                      PopupMenuItem(
-                        child: Text("Wallpaper"),
-                        value: "Wallpaper",
+                        child: Text(
+                          "Sair do grupo",
+                          style: GoogleFonts.quicksand(
+                            fontSize: 16,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        value: "Sair do grupo",
                       ),
                     ];
                   },
@@ -151,7 +156,9 @@ class _ChatMessagePageState extends State<ChatMessagePage> {
                           .snapshots(),
                       builder: (_, snapshot) {
                         if (snapshot.hasError) {
-                          return Text('Something went wrong');
+                          return Text(
+                            'Something went wrong',
+                          );
                         }
 
                         if (snapshot.connectionState ==
@@ -190,9 +197,9 @@ class _ChatMessagePageState extends State<ChatMessagePage> {
                                 width: MediaQuery.of(context).size.width - 60,
                                 child: Card(
                                   margin: EdgeInsets.only(
-                                      left: 2, right: 2, bottom: 8),
+                                      left: 12, right: 12, bottom: 8),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25),
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: TextFormField(
                                     controller: txtMensagemCtrl,
@@ -202,43 +209,11 @@ class _ChatMessagePageState extends State<ChatMessagePage> {
                                     minLines: 1,
                                     decoration: InputDecoration(
                                       border: InputBorder.none,
-                                      hintText: "Type a message",
-                                      hintStyle: TextStyle(color: Colors.grey),
-                                      prefixIcon: IconButton(
-                                        icon: Icon(
-                                          show
-                                              ? Icons.keyboard
-                                              : Icons.emoji_emotions_outlined,
-                                        ),
-                                        onPressed: () {
-                                          if (!show) {
-                                            focusNode.unfocus();
-                                            focusNode.canRequestFocus = false;
-                                          }
-                                          setState(() {
-                                            show = !show;
-                                          });
-                                        },
-                                      ),
+                                      hintText: "Esvreva sua mensagem",
+                                      hintStyle: TextStyle(
+                                          color: Colors.grey.shade400),
                                       suffixIcon: Row(
                                         mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          IconButton(
-                                            icon: Icon(Icons.attach_file),
-                                            onPressed: () {
-                                              showModalBottomSheet(
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                  context: context,
-                                                  builder: (builder) =>
-                                                      bottomSheet());
-                                            },
-                                          ),
-                                          IconButton(
-                                            icon: Icon(Icons.camera_alt),
-                                            onPressed: () {},
-                                          ),
-                                        ],
                                       ),
                                       contentPadding: EdgeInsets.all(5),
                                     ),
@@ -253,16 +228,30 @@ class _ChatMessagePageState extends State<ChatMessagePage> {
                                 ),
                                 child: CircleAvatar(
                                   radius: 25,
-                                  backgroundColor: Color(0xFF128C7E),
+                                  backgroundColor: AppColors.principal,
                                   child: IconButton(
                                     icon: Icon(
                                       Icons.send,
                                       color: Colors.white,
                                     ),
                                     onPressed: () async {
+                                      await firebase.firestore
+                                          .collection('usuarios')
+                                          .where('uid',
+                                              isEqualTo: firebase.usuario!.uid)
+                                          .get()
+                                          .then((value) => {
+                                                value.docs
+                                                    .asMap()
+                                                    .forEach((index, data) {
+                                                  nomeUsuario = value
+                                                      .docs[index]['apelido'];
+                                                })
+                                              });
+
                                       MensagemModel m = MensagemModel(
                                         uid: firebase.usuario!.uid,
-                                        nome: firebase.usuario!.displayName,
+                                        nome: nomeUsuario,
                                         mensagem: txtMensagemCtrl.text,
                                         data: Timestamp.now(),
                                         idGrupo: widget.idGrupo,
@@ -303,85 +292,56 @@ class _ChatMessagePageState extends State<ChatMessagePage> {
     );
   }
 
-  Widget bottomSheet() {
-    return Container(
-      height: 278,
-      width: MediaQuery.of(context).size.width,
-      child: Card(
-        margin: const EdgeInsets.all(18.0),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  iconCreation(
-                      Icons.insert_drive_file, Colors.indigo, "Document"),
-                  SizedBox(
-                    width: 40,
-                  ),
-                  iconCreation(Icons.camera_alt, Colors.pink, "Camera"),
-                  SizedBox(
-                    width: 40,
-                  ),
-                  iconCreation(Icons.insert_photo, Colors.purple, "Gallery"),
-                ],
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  iconCreation(Icons.headset, Colors.orange, "Audio"),
-                  SizedBox(
-                    width: 40,
-                  ),
-                  iconCreation(Icons.location_pin, Colors.teal, "Location"),
-                  SizedBox(
-                    width: 40,
-                  ),
-                  iconCreation(Icons.person, Colors.blue, "Contact"),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget bottomSheet() {
+  //   return Container(
+  //     height: 278,
+  //     width: MediaQuery.of(context).size.width,
+  //     child: Card(
+  //       margin: const EdgeInsets.all(18.0),
+  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+  //       child: Padding(
+  //         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+  //         child: Column(
+  //           children: [
+  //             Row(
+  //               mainAxisAlignment: MainAxisAlignment.center,
+  //               children: [
+  //                 iconCreation(
+  //                     Icons.insert_drive_file, Colors.indigo, "Document"),
+  //                 SizedBox(
+  //                   width: 40,
+  //                 ),
+  //                 iconCreation(Icons.camera_alt, Colors.pink, "Camera"),
+  //                 SizedBox(
+  //                   width: 40,
+  //                 ),
+  //                 iconCreation(Icons.insert_photo, Colors.purple, "Gallery"),
+  //               ],
+  //             ),
+  //             SizedBox(
+  //               height: 30,
+  //             ),
+  //             Row(
+  //               mainAxisAlignment: MainAxisAlignment.center,
+  //               children: [
+  //                 iconCreation(Icons.headset, Colors.orange, "Audio"),
+  //                 SizedBox(
+  //                   width: 40,
+  //                 ),
+  //                 iconCreation(Icons.location_pin, Colors.teal, "Location"),
+  //                 SizedBox(
+  //                   width: 40,
+  //                 ),
+  //                 iconCreation(Icons.person, Colors.blue, "Contact"),
+  //               ],
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Widget iconCreation(IconData icons, Color color, String text) {
-    return InkWell(
-      onTap: () {},
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: color,
-            child: Icon(
-              icons,
-              // semanticLabel: "Help",
-              size: 29,
-              color: Colors.white,
-            ),
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Text(
-            text,
-            style: TextStyle(
-              fontSize: 12,
-              // fontWeight: FontWeight.w100,
-            ),
-          )
-        ],
-      ),
-    );
-  }
 }
 
 loading() {
