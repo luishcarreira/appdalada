@@ -34,12 +34,12 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       isLogin = acao;
       if (isLogin) {
-        titulo = 'Realizar Login';
+        titulo = 'Acessar conta';
 
-        actionButton = 'Acessar conta';
-        toggleButton = 'Cadastrar';
+        actionButton = 'Entrar';
+        toggleButton = 'Cadastrar conta';
       } else {
-        titulo = 'Crie sua conta';
+        titulo = 'Cadastro';
         actionButton = 'Cadastrar';
         toggleButton = 'Voltar ao login';
       }
@@ -75,22 +75,22 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          margin: EdgeInsets.only(top: 30),
+          margin: EdgeInsets.only(top: 15),
           color: Colors.white,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 42,
+                height: 15,
               ),
               Center(
                 child: Image.asset(
                   'assets/images/logo.png',
-                  width: 150,
+                  width: 125,
                 ),
               ),
               SizedBox(
-                height: 22,
+                height: 5,
               ),
               Center(
                 child: Text(
@@ -179,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
                             builder: (context) => ResetPasswordPage()));
                   },
                   child: Text(
-                    'Esqueceu a senha?',
+                    '',
                     style: TextStyle(fontSize: 15),
                   ),
                 ),

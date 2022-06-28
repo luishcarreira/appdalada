@@ -30,12 +30,11 @@ class AppBarExplorarRoute extends PreferredSize {
                   children: [
                     Center(
                       child: Text(
-                        'Explorar Rotas',
+                        'Rotas',
                         style: GoogleFonts.quicksand(
                           fontSize: 26,
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
-                          letterSpacing: 1,
                         ),
                       ),
                     ),

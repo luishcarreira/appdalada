@@ -227,23 +227,21 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
         // #CARD SOBRE
         Positioned(
           top: 380,
+          right: 20,
           child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
             elevation: 4,
             child: Container(
               margin: EdgeInsets.all(120),
               padding: EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    widget.sobre!,
-                    style: GoogleFonts.quicksand(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ],
+              child: Text(
+                widget.sobre!,
+                style: GoogleFonts.quicksand(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
           ),
@@ -321,18 +319,34 @@ void _showDialogClassificacao(BuildContext context) {
         content: const Text("Deseja alterar a classificação?"),
         actions: <Widget>[
           TextButton(
-            child: Text("Sim"),
+            child: Text(
+              "Não",
+              style: GoogleFonts.quicksand(
+                fontSize: 14,
+                color: AppColors.principal,
+                fontWeight: FontWeight.bold,
+                height: 1.2,
+              ),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: Text(
+              "Sim",
+              style: GoogleFonts.quicksand(
+                fontSize: 14,
+                color: AppColors.principal,
+                fontWeight: FontWeight.bold,
+                height: 1.2,
+              ),
+            ),
             onPressed: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: ((context) => UserAlterarClassificacaoPage())));
-            },
-          ),
-          TextButton(
-            child: Text("Não"),
-            onPressed: () {
-              Navigator.of(context).pop();
             },
           ),
         ],
@@ -350,14 +364,28 @@ void _showDialogFoto(BuildContext context, VoidCallback pickAndUploadImage) {
         content: const Text("Deseja alterar a foto?"),
         actions: <Widget>[
           TextButton(
-            child: Text("Sim"),
-            onPressed: pickAndUploadImage,
-          ),
-          TextButton(
-            child: Text("Não"),
+            child: Text(
+              "Não",
+              style: GoogleFonts.quicksand(
+                fontSize: 14,
+                color: AppColors.principal,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             onPressed: () {
               Navigator.of(context).pop();
             },
+          ),
+          TextButton(
+            child: Text(
+              "Sim",
+              style: GoogleFonts.quicksand(
+                fontSize: 14,
+                color: AppColors.principal,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onPressed: pickAndUploadImage,
           ),
         ],
       );

@@ -34,9 +34,9 @@ class _HomePageState extends State<HomePage> {
       body: PageView(
         controller: pc,
         children: [
+          ChatPage(),
           ExplorarRoute(),
           ExplorarPage(),
-          ChatPage(),
           UserProfilePage(),
         ],
         onPageChanged: setPaginaAtual,
@@ -46,16 +46,16 @@ class _HomePageState extends State<HomePage> {
         items: [
           BottomNavigationBarItem(
               icon: Icon(
-                Icons.pedal_bike,
+                Icons.chat_outlined,
                 color: AppColors.principal,
               ),
+              label: 'Chat'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.pedal_bike, color: AppColors.principal),
               label: 'Rotas'),
           BottomNavigationBarItem(
               icon: Icon(Icons.groups_sharp, color: AppColors.principal),
               label: 'Grupos'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.chat_outlined, color: AppColors.principal),
-              label: 'Chat'),
           BottomNavigationBarItem(
               icon: Icon(Icons.person, color: AppColors.principal),
               label: 'Perfil'),

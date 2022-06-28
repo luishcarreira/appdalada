@@ -30,12 +30,11 @@ class AppBarChatPage extends PreferredSize {
                   children: [
                     Center(
                       child: Text(
-                        'Grupos',
+                        'Meus grupos',
                         style: GoogleFonts.quicksand(
                           fontSize: 26,
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
-                          letterSpacing: 1,
                         ),
                       ),
                     ),

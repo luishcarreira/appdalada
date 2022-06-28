@@ -5,6 +5,8 @@ import 'dart:io';
 import 'package:appdalada/components/app_bar_group.dart';
 import 'package:appdalada/core/app/app_colors.dart';
 import 'package:appdalada/core/service/auth/auth_firebase_service.dart';
+import 'package:appdalada/pages/chat/chat_message_page_v2.dart';
+import 'package:appdalada/pages/home/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +16,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:math';
 
 class CreateGroup extends StatefulWidget {
-  const CreateGroup({Key? key}) : super(key: key);
+  final int id_grupo;
+  const CreateGroup({Key? key, required this.id_grupo}) : super(key: key);
 
   @override
   _CreateGroupState createState() => _CreateGroupState();
@@ -23,7 +26,6 @@ class CreateGroup extends StatefulWidget {
 class _CreateGroupState extends State<CreateGroup> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController nome = TextEditingController();
-  final ramdom = Random();
   String dropdownValue = 'Iniciante';
 
   final FirebaseStorage storage = FirebaseStorage.instance;
@@ -42,8 +44,7 @@ class _CreateGroupState extends State<CreateGroup> {
         Provider.of<AuthFirebaseService>(context, listen: false);
     File file = File(path);
     try {
-      //ref = 'Images/usr-${firebase.usuario!.uid}.jpg';
-      ref = 'Images/usr-1.jpg';
+      ref = 'Images/grp-${widget.id_grupo}.jpg';
       return storage.ref(ref).putFile(file);
     } on FirebaseException catch (e) {
       throw Exception('Erro no upload: ${e.code}');
@@ -98,8 +99,6 @@ class _CreateGroupState extends State<CreateGroup> {
   }
 
   _onSubmit() async {
-    final numero = ramdom.nextInt(999999);
-
     AuthFirebaseService firebase =
         Provider.of<AuthFirebaseService>(context, listen: false);
     final isValid = _formKey.currentState!.validate();
@@ -108,7 +107,7 @@ class _CreateGroupState extends State<CreateGroup> {
       DocumentReference docRef = firebase.firestore.collection('grupos').doc();
       firebase.firestore.collection('grupos').doc(docRef.id).set(
         {
-          'id_grupo': numero,
+          'id_grupo': widget.id_grupo,
           'administrador': firebase.usuario!.uid,
           'participantes': [
             firebase.usuario!.uid,
@@ -120,7 +119,7 @@ class _CreateGroupState extends State<CreateGroup> {
         },
       );
 
-      Navigator.pop(context);
+      Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Erro ao inserir grupo!'),
@@ -158,27 +157,9 @@ class _CreateGroupState extends State<CreateGroup> {
             Column(
               children: [
                 Text(
-                  'Selecione uma',
+                  'Criar grupo',
                   style: GoogleFonts.quicksand(
-                    fontSize: 35,
-                    color: AppColors.principal,
-                    fontWeight: FontWeight.bold,
-                    height: 1.2,
-                  ),
-                ),
-                Text(
-                  'Imagem de ',
-                  style: GoogleFonts.quicksand(
-                    fontSize: 35,
-                    color: AppColors.principal,
-                    fontWeight: FontWeight.bold,
-                    height: 1.2,
-                  ),
-                ),
-                Text(
-                  'perfil.',
-                  style: GoogleFonts.quicksand(
-                    fontSize: 35,
+                    fontSize: 36,
                     color: AppColors.principal,
                     fontWeight: FontWeight.bold,
                     height: 1.2,
@@ -186,15 +167,7 @@ class _CreateGroupState extends State<CreateGroup> {
                 ),
               ],
             ),
-            SizedBox(height: 25),
-            Text(
-              'Imagem que será exibida no perfil do grupo',
-              style: GoogleFonts.quicksand(
-                fontSize: 14,
-                color: Color.fromARGB(255, 185, 185, 185),
-              ),
-            ),
-            SizedBox(height: 25),
+            SizedBox(height: 45),
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: TextButton(
@@ -215,7 +188,14 @@ class _CreateGroupState extends State<CreateGroup> {
                 ),
               ),
             ),
-            SizedBox(height: 25),
+            Text(
+              'Imagem que será exibida no perfil do grupo',
+              style: GoogleFonts.quicksand(
+                fontSize: 14,
+                color: Color.fromARGB(255, 148, 145, 145),
+              ),
+            ),
+            SizedBox(height: 15),
             Form(
               key: _formKey,
               child: Column(
@@ -223,14 +203,15 @@ class _CreateGroupState extends State<CreateGroup> {
                   Padding(
                     padding: const EdgeInsets.all(20),
                     child: Material(
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(12),
                       elevation: 5,
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(2.0),
                         child: TextFormField(
+                          textAlign: TextAlign.center,
                           controller: nome,
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 18,
                           ),
                           decoration: InputDecoration(
                             border: InputBorder.none,
@@ -255,12 +236,12 @@ class _CreateGroupState extends State<CreateGroup> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 25),
+              padding: const EdgeInsets.only(left: 20),
               child: Text(
-                'Nome de exibição do grupo.',
+                'Nome de exibição do grupo',
                 style: GoogleFonts.quicksand(
                   fontSize: 14,
-                  color: Colors.black,
+                  color: Color.fromARGB(255, 148, 145, 145),
                 ),
               ),
             ),
@@ -274,7 +255,7 @@ class _CreateGroupState extends State<CreateGroup> {
                 elevation: 5,
                 child: DropdownButtonHideUnderline(
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(4.0),
                     child: DropdownButton<String>(
                       isExpanded: true,
                       value: dropdownValue,
@@ -288,10 +269,10 @@ class _CreateGroupState extends State<CreateGroup> {
                         });
                       },
                       items: <String>[
+                        'Livre',
                         'Iniciante',
                         'Intermediário',
                         'Avançado',
-                        'Livre'
                       ].map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
@@ -309,7 +290,7 @@ class _CreateGroupState extends State<CreateGroup> {
                 'Classificação do grupo.',
                 style: GoogleFonts.quicksand(
                   fontSize: 14,
-                  color: Colors.black,
+                  color: Color.fromARGB(255, 148, 145, 145),
                 ),
               ),
             ),
@@ -332,13 +313,13 @@ class _CreateGroupState extends State<CreateGroup> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Padding(
-                              padding: EdgeInsets.all(16),
+                              padding: EdgeInsets.all(12),
                               child: Text(
                                 'Salvar',
                                 style: GoogleFonts.quicksand(
-                                  fontSize: 24,
+                                  fontSize: 18,
                                   color: Colors.white,
-                                  fontWeight: FontWeight.w700,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ),

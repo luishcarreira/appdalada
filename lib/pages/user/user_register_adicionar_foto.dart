@@ -105,6 +105,7 @@ class _UserRegisterAdicionarFotoState extends State<UserRegisterAdicionarFoto> {
           'email': firebase.usuario!.email,
           'apelido': _apelido.text,
           'imagem': imagem,
+          'imagens': [imagem],
         },
       );
 
@@ -174,7 +175,7 @@ class _UserRegisterAdicionarFotoState extends State<UserRegisterAdicionarFoto> {
                 ),
               ),
               Text(
-                'do Appdalada.',
+                'do aplicativo.',
                 style: GoogleFonts.quicksand(
                   fontSize: 14,
                   color: Color(0xFFA1C69C),
@@ -207,7 +208,7 @@ class _UserRegisterAdicionarFotoState extends State<UserRegisterAdicionarFoto> {
           Column(
             children: [
               Text(
-                'Nome ou apelido que será exibido para os outros',
+                'Nome que ficará visível para todos os',
                 style: GoogleFonts.quicksand(
                   fontSize: 14,
                   color: Color(0xFFA1C69C),
@@ -231,7 +232,7 @@ class _UserRegisterAdicionarFotoState extends State<UserRegisterAdicionarFoto> {
                 borderRadius: BorderRadius.circular(10),
                 elevation: 5,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(0),
                   child: TextFormField(
                     controller: _apelido,
                     textAlign: TextAlign.center,
@@ -270,19 +271,19 @@ class _UserRegisterAdicionarFotoState extends State<UserRegisterAdicionarFoto> {
                     child: Container(
                       decoration: BoxDecoration(
                         color: AppColors.principal,
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
-                            padding: EdgeInsets.all(16),
+                            padding: EdgeInsets.all(12),
                             child: Text(
                               'Continuar',
                               style: GoogleFonts.quicksand(
-                                fontSize: 24,
+                                fontSize: 18,
                                 color: Colors.white,
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),

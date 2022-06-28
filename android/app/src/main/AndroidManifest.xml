@@ -6,7 +6,7 @@
    <application
         android:label="appdalada"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyBq9eem4NHWHOB6YARuVVRKBeBA3aUOuso"/>
         <activity

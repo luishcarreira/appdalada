@@ -36,7 +36,6 @@ class AppBarExplorarPage extends PreferredSize {
                           fontSize: 26,
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
-                          letterSpacing: 1,
                         ),
                       ),
                     ),

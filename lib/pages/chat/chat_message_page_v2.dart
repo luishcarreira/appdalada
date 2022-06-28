@@ -5,6 +5,7 @@ import 'package:appdalada/components/ReplyCard.dart';
 import 'package:appdalada/core/app/app_colors.dart';
 import 'package:appdalada/core/models/message.dart';
 import 'package:appdalada/core/service/auth/auth_firebase_service.dart';
+import 'package:appdalada/pages/chat/participantes_page.dart.dart';
 import 'package:appdalada/pages/home/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -103,26 +104,58 @@ class _ChatMessagePageState extends State<ChatMessagePage> {
                   itemBuilder: (BuildContext contesxt) {
                     return [
                       PopupMenuItem(
-                        child: Text(
-                          "Participantes",
-                          style: GoogleFonts.quicksand(
-                            fontSize: 16,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
+                        child: TextButton(
+                          onPressed: () async {
+                            await firebase.firestore
+                                .collection('grupos')
+                                .doc(widget.refGrupo)
+                                .get()
+                                .then((DocumentSnapshot doc) {
+                              final data = doc.data() as Map<String, dynamic>;
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => ParticipantesPage(
+                                    participantes: data['participantes'],
+                                  ),
+                                ),
+                              );
+                            });
+                          },
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              'Participantes',
+                              style: GoogleFonts.quicksand(
+                                fontSize: 16,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ),
                         ),
-                        value: "Participantes",
+                        onTap: null,
                       ),
                       PopupMenuItem(
-                        child: Text(
-                          "Sair do grupo",
-                          style: GoogleFonts.quicksand(
-                            fontSize: 16,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            _showDialog(context, widget.refGrupo);
+                          },
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              'Sair',
+                              style: GoogleFonts.quicksand(
+                                fontSize: 16,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ),
                         ),
-                        value: "Sair do grupo",
+                        onTap: null,
                       ),
                     ];
                   },
@@ -289,6 +322,66 @@ class _ChatMessagePageState extends State<ChatMessagePage> {
           ),
         ),
       ],
+    );
+  }
+
+  void _showDialog(BuildContext context, String docRef) {
+    AuthFirebaseService firebase =
+        Provider.of<AuthFirebaseService>(context, listen: false);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Grupos"),
+          content: const Text("Deseja sair no grupo?"),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                "Não",
+                style: GoogleFonts.quicksand(
+                  fontSize: 14,
+                  color: AppColors.principal,
+                  fontWeight: FontWeight.bold,
+                  height: 1.2,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(
+                "Sim",
+                style: GoogleFonts.quicksand(
+                  fontSize: 14,
+                  color: AppColors.principal,
+                  fontWeight: FontWeight.bold,
+                  height: 1.2,
+                ),
+              ),
+              onPressed: () async {
+                await firebase.firestore
+                    .collection('grupos')
+                    .doc(docRef)
+                    .update(
+                  {
+                    'participantes': FieldValue.arrayRemove([
+                      firebase.usuario!.uid,
+                    ]),
+                  },
+                );
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const HomePage(),
+                  ),
+                );
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

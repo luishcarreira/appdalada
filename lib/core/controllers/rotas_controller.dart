@@ -12,6 +12,11 @@ class RotasController extends GetxController {
   LatLng _position = LatLng(-23.571505, -46.689104);
   GoogleMapController? _mapsController;
 
+  double startLat = 0.0;
+  double startLong = 0.0;
+  double endLat = 0.0;
+  double endLong = 0.0;
+
   final markers = Set<Marker>();
 
   static RotasController get to => Get.find<RotasController>();
@@ -22,22 +27,6 @@ class RotasController extends GetxController {
   onMapCreated(GoogleMapController gmc) async {
     _mapsController = gmc;
     getPosicao();
-    //loadAnimais(/*filtro*/);
-  }
-
-  loadAnimais(/*String filtro*/) async {
-    //if (filtro != '') {
-    /*final animais = await firestore
-        .collection('rotas')
-        .where('refAnimal',
-            isEqualTo: 'Wyr7GZgCqNnNr84tbU7s') //referecia ou cod animal
-        .get();
-
-    markers.clear();
-    animais.docs.forEach((element) => addMarker(element));*/
-    //} else {
-    // print('vazio');
-    //}
   }
 
   addMarker(element) async {
@@ -48,19 +37,9 @@ class RotasController extends GetxController {
         markerId: MarkerId(element.id),
         position: LatLng(point.latitude, point.longitude),
         infoWindow: InfoWindow(title: element.get('nome')),
-        onTap: () => showDetails(element),
       ),
     );
     update();
-  }
-
-  showDetails(element) {
-    /*Get.bottomSheet(
-      OngDetalhes(
-        nome: element.get('nome'),
-      ),
-      barrierColor: Colors.transparent,
-    );*/
   }
 
   Future<Position> _posicaoAtual() async {
@@ -106,5 +85,29 @@ class RotasController extends GetxController {
         snackPosition: SnackPosition.BOTTOM,
       );
     }
+  }
+
+  getRota(String refRota) async {
+    await firestore
+        .collection('rotas')
+        .where('refRota', isEqualTo: refRota) //referecia ou cod animal
+        .get()
+        .then(
+          (value) => {
+            value.docs.asMap().forEach((index, data) {
+              final startPoint =
+                  value.docs[index]['start_position'] as GeoPoint;
+
+              final endPoint = value.docs[index]['start_position'] as GeoPoint;
+
+              startLat = startPoint.latitude;
+              startLong = startPoint.longitude;
+              endLat = endPoint.latitude;
+              endLong = endPoint.longitude;
+
+              update();
+            })
+          },
+        );
   }
 }

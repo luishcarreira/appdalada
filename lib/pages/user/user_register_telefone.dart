@@ -1,24 +1,27 @@
 import 'package:appdalada/core/app/app_colors.dart';
 import 'package:appdalada/core/service/auth/auth_firebase_service.dart';
 import 'package:appdalada/pages/user/user_register_sobre_page.dart';
-import 'package:appdalada/pages/user/user_register_telefone.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 
-class UserRegisterNascimentoPage extends StatefulWidget {
+class UserRegisterTelefone extends StatefulWidget {
+  const UserRegisterTelefone({Key? key}) : super(key: key);
+
   @override
-  _UserRegisterNascimentoPageState createState() =>
-      _UserRegisterNascimentoPageState();
+  State<UserRegisterTelefone> createState() => _UserRegisterTelefoneState();
 }
 
-class _UserRegisterNascimentoPageState
-    extends State<UserRegisterNascimentoPage> {
-  final format = DateFormat("dd-MM-yyyy");
-  final TextEditingController _data = TextEditingController();
+class _UserRegisterTelefoneState extends State<UserRegisterTelefone> {
+  @override
   final _formKey = GlobalKey<FormState>();
+
+  var maskFormatter = MaskTextInputFormatter(
+    mask: '(##) #####-####',
+    filter: {"#": RegExp(r'[0-9]')},
+    type: MaskAutoCompletionType.lazy,
+  );
 
   _onSubmit() {
     AuthFirebaseService firebase =
@@ -31,19 +34,18 @@ class _UserRegisterNascimentoPageState
           .collection('usuarios')
           .doc(firebase.usuario!.uid)
           .update({
-        'data_nascimento': _data.text,
+        'numero_telefone': maskFormatter.getUnmaskedText(),
       });
 
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => UserRegisterTelefone(),
+          builder: (_) => UserRegisterSobrePage(),
         ),
       );
     }
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
@@ -52,7 +54,7 @@ class _UserRegisterNascimentoPageState
           Column(
             children: [
               Text(
-                'Nos informe sua',
+                'Nos informe seu',
                 style: GoogleFonts.quicksand(
                   fontSize: 36,
                   color: AppColors.principal,
@@ -61,7 +63,7 @@ class _UserRegisterNascimentoPageState
                 ),
               ),
               Text(
-                'data de nascimento',
+                'número de telefone',
                 style: GoogleFonts.quicksand(
                   fontSize: 36,
                   color: AppColors.principal,
@@ -71,17 +73,7 @@ class _UserRegisterNascimentoPageState
               ),
             ],
           ),
-          SizedBox(height: 32),
-          Center(
-            child: Text(
-              'Insira sua data de nascimento',
-              style: GoogleFonts.quicksand(
-                fontSize: 14,
-                color: Color(0xFFA1C69C),
-              ),
-            ),
-          ),
-          SizedBox(height: 40),
+          SizedBox(height: 75),
           Form(
             key: _formKey,
             child: Padding(
@@ -90,27 +82,26 @@ class _UserRegisterNascimentoPageState
                 borderRadius: BorderRadius.circular(10),
                 elevation: 5,
                 child: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: DateTimeField(
+                  padding: const EdgeInsets.all(0),
+                  child: TextFormField(
+                    inputFormatters: [
+                      maskFormatter,
+                    ],
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      prefixIcon: Icon(
-                        Icons.date_range,
-                        color: AppColors.principal,
+                      hintText: 'telefone',
+                      hintStyle: GoogleFonts.quicksand(
+                        fontSize: 18,
+                        color: Color(0xFFA1C69C),
                       ),
                     ),
-                    format: format,
-                    controller: _data,
-                    onShowPicker: (context, currentValue) {
-                      return showDatePicker(
-                        context: context,
-                        firstDate: DateTime(1900),
-                        initialDate: currentValue ?? DateTime.now(),
-                        lastDate: DateTime(2100),
-                      );
-                    },
+                    keyboardType: TextInputType.name,
                     validator: (text) {
-                      if (text == null) {
+                      if (text == null || text.isEmpty) {
                         return 'Preencha o campo corretamente!';
                       }
 
@@ -121,7 +112,7 @@ class _UserRegisterNascimentoPageState
               ),
             ),
           ),
-          SizedBox(height: 25),
+          SizedBox(height: 40),
           Padding(
             padding: EdgeInsets.all(24),
             child: GestureDetector(

@@ -1,6 +1,7 @@
 import 'package:appdalada/components/user_profile_widget.dart';
 import 'package:appdalada/core/app/app_colors.dart';
 import 'package:appdalada/core/service/auth/auth_firebase_service.dart';
+import 'package:appdalada/pages/user/user_view_profile_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -37,11 +38,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
           Map<String, dynamic> data =
               snapshot.data!.data() as Map<String, dynamic>;
 
-          return UserProfileWidget(
-            foto: data['imagem'],
-            apelido: data['apelido'] ?? '',
-            classificacao: data['classificacao'] ?? '',
-            sobre: data['sobre'] ?? '',
+          return UserViewProfilePage(
+            uid: data['uid'],
           );
         }
 

@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:appdalada/core/app/app_colors.dart';
 import 'package:appdalada/core/service/auth/auth_firebase_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:appdalada/pages/rotas/create_rota_inicial_page.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,7 +13,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:math';
 
 class CreateRotaPage extends StatefulWidget {
-  const CreateRotaPage({Key? key}) : super(key: key);
+  final String refDoc;
+  const CreateRotaPage({Key? key, required this.refDoc}) : super(key: key);
 
   @override
   _CreateRotaPageState createState() => _CreateRotaPageState();
@@ -42,7 +43,7 @@ class _CreateRotaPageState extends State<CreateRotaPage> {
     File file = File(path);
     try {
       //ref = 'Images/usr-${firebase.usuario!.uid}.jpg';
-      ref = 'Images/usr-1.jpg';
+      ref = 'Images/route-${widget.refDoc}.jpg';
       return storage.ref(ref).putFile(file);
     } on FirebaseException catch (e) {
       throw Exception('Erro no upload: ${e.code}');
@@ -98,17 +99,19 @@ class _CreateRotaPageState extends State<CreateRotaPage> {
     final isValid = _formKey.currentState!.validate();
 
     if (isValid) {
-      DocumentReference docRef = firebase.firestore.collection('rotas').doc();
-      firebase.firestore.collection('rotas').doc(docRef.id).set(
+      firebase.firestore.collection('rotas').doc(widget.refDoc).set(
         {
-          'refRota': docRef.id,
+          'refRota': widget.refDoc,
           'nome': nome.text,
           'classificacao': dropdownValue,
           'imagem': imagem,
         },
       );
 
-      Navigator.pop(context);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => CreateRotaInicialPage(refRota: widget.refDoc)));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Erro ao inserir grupo!'),
@@ -146,25 +149,7 @@ class _CreateRotaPageState extends State<CreateRotaPage> {
             Column(
               children: [
                 Text(
-                  'Selecione uma',
-                  style: GoogleFonts.quicksand(
-                    fontSize: 35,
-                    color: AppColors.principal,
-                    fontWeight: FontWeight.bold,
-                    height: 1.2,
-                  ),
-                ),
-                Text(
-                  'Imagem de ',
-                  style: GoogleFonts.quicksand(
-                    fontSize: 35,
-                    color: AppColors.principal,
-                    fontWeight: FontWeight.bold,
-                    height: 1.2,
-                  ),
-                ),
-                Text(
-                  'perfil.',
+                  'Criar percurso',
                   style: GoogleFonts.quicksand(
                     fontSize: 35,
                     color: AppColors.principal,
@@ -173,14 +158,6 @@ class _CreateRotaPageState extends State<CreateRotaPage> {
                   ),
                 ),
               ],
-            ),
-            SizedBox(height: 25),
-            Text(
-              'Imagem que será exibida no perfil da rota',
-              style: GoogleFonts.quicksand(
-                fontSize: 14,
-                color: Color.fromARGB(255, 185, 185, 185),
-              ),
             ),
             SizedBox(height: 25),
             Padding(
@@ -203,7 +180,14 @@ class _CreateRotaPageState extends State<CreateRotaPage> {
                 ),
               ),
             ),
-            SizedBox(height: 25),
+            Text(
+              'Imagem que será exibida no perfil da rota',
+              style: GoogleFonts.quicksand(
+                fontSize: 14,
+                color: Color.fromARGB(255, 185, 185, 185),
+              ),
+            ),
+            SizedBox(height: 15),
             Form(
               key: _formKey,
               child: Column(
@@ -216,12 +200,16 @@ class _CreateRotaPageState extends State<CreateRotaPage> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
+                          maxLength: 26,
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
                           controller: nome,
                           style: TextStyle(
                             fontSize: 20,
                           ),
                           decoration: InputDecoration(
                             border: InputBorder.none,
+                            counterText: "",
                             hintText: 'Nome da rota',
                             hintStyle: TextStyle(
                               color: AppColors.principal,
@@ -262,7 +250,7 @@ class _CreateRotaPageState extends State<CreateRotaPage> {
                 elevation: 5,
                 child: DropdownButtonHideUnderline(
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(4.0),
                     child: DropdownButton<String>(
                       isExpanded: true,
                       value: dropdownValue,
@@ -279,7 +267,6 @@ class _CreateRotaPageState extends State<CreateRotaPage> {
                         'Iniciante',
                         'Intermediário',
                         'Avançado',
-                        'Livre'
                       ].map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
@@ -314,19 +301,19 @@ class _CreateRotaPageState extends State<CreateRotaPage> {
                       child: Container(
                         decoration: BoxDecoration(
                           color: AppColors.principal,
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Padding(
-                              padding: EdgeInsets.all(16),
+                              padding: EdgeInsets.all(12),
                               child: Text(
                                 'Salvar',
                                 style: GoogleFonts.quicksand(
-                                  fontSize: 24,
+                                  fontSize: 18,
                                   color: Colors.white,
-                                  fontWeight: FontWeight.w700,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ),
